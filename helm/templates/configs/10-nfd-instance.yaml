@@ -1,0 +1,14 @@
+# Creates an instance of NodeFeatureDiscovery, which deploys the worker pods
+apiVersion: nfd.openshift.io/v1
+kind: NodeFeatureDiscovery
+metadata:
+  name: nfd-instance
+  namespace: openshift-nfd
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  workerConfig:
+    configData: |
+      core:
+        sleepInterval: 60s

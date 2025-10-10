@@ -1,0 +1,11 @@
+apiVersion: dscinitialization.opendatahub.io/v1
+kind: DSCInitialization
+metadata:
+  name: default-dsci
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "25"
+spec:
+  dataScienceClusterInitialization:
+    serviceMesh:
+      managementState: {{ .Values.enabledAdvancedServing }}

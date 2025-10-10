@@ -1,0 +1,45 @@
+channel: ""
+operatorReplicas: 1
+dashboardReplicas: 1
+advancedServing: &advancedServing "Removed"
+
+dataScienceCluster:
+  create: true
+
+  components:
+    codeflare:
+      managementState: Removed
+    kserve:
+      managementState: Managed
+      nim:
+        managementState: Managed
+      defaultDeploymentMode: RawDeployment
+      rawDeploymentServiceConfig: Headed
+      serving:
+        ingressGateway:
+          certificate:
+            type: OpenshiftDefaultIngress
+        managementState: *advancedServing
+        name: knative-serving
+    modelregistry:
+      managementState: Managed
+      registriesNamespace: rhoai-model-registries
+    trustyai:
+      managementState: Managed
+    ray:
+      managementState: Managed
+    kueue:
+      managementState: Managed
+    workbenches:
+      managementState: Managed
+      workbenchNamespace: rhods-notebooks
+    dashboard:
+      managementState: Managed
+    modelmeshserving:
+      managementState: Removed
+    datasciencepipelines:
+      managementState: Managed
+    trainingoperator:
+      managementState: Managed
+    llamastackoperator:
+      managementState: Managed
