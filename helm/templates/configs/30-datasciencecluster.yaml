@@ -1,0 +1,18 @@
+{{- if .Values.dataScienceCluster.create }}
+---
+apiVersion: datasciencecluster.opendatahub.io/v1
+kind: DataScienceCluster
+metadata:
+  name: default-dsc
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "30"
+  namespace: redhat-ods-applications
+{{- if .Values.dataScienceCluster.components }}
+spec:
+  components:
+    {{- toYaml .Values.dataScienceCluster.components | nindent 4 }}
+{{- else }}
+spec: {}
+{{- end }}
+{{- end }}
