@@ -6,7 +6,7 @@ metadata:
   name: default-dsc
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: "30"
+    argocd.argoproj.io/sync-wave: "33"
   namespace: redhat-ods-applications
 {{- if .Values.dataScienceCluster.components }}
 spec:

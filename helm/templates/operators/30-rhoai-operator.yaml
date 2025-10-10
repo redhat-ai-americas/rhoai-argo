@@ -11,7 +11,7 @@ metadata:
   name: redhat-ods-operator-group
   namespace: redhat-ods-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "40"
+    argocd.argoproj.io/sync-wave: "30"
 spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
@@ -20,7 +20,7 @@ metadata:
   name: rhods-operator
   namespace: redhat-ods-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "40"
+    argocd.argoproj.io/sync-wave: "30"
 spec:
   channel: {{ .Values.channel }}
   installPlanApproval: Automatic

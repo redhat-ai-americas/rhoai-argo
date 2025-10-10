@@ -12,7 +12,7 @@ metadata:
   name: authorino-operator-group
   namespace: authorino-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "30"
+    argocd.argoproj.io/sync-wave: "7"
 spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
@@ -21,7 +21,7 @@ metadata:
   name: authorino-operator
   namespace: authorino-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "30"
+    argocd.argoproj.io/sync-wave: "7"
 spec:
   channel: "stable"
   installPlanApproval: Automatic

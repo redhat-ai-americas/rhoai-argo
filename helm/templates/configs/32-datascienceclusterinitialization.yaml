@@ -4,7 +4,7 @@ metadata:
   name: default-dsci
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: "25"
+    argocd.argoproj.io/sync-wave: "32"
 spec:
   dataScienceClusterInitialization:
     serviceMesh:
