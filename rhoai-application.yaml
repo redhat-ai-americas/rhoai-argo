@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rhoai-deployment2
+  name: rhoai-deployment
 spec:
   destination:
     name: in-cluster
@@ -10,6 +10,14 @@ spec:
     path: helm/
     repoURL: https://github.com/brianjball/rhoai-argo.git
     targetRevision: HEAD
+    helm:
+      parameters:
+        - name: channel
+          value: fast
+        - name: dashboardConfig.disableModelCatalog
+          value: false
+        - name: dashboardConfig.disableHardwareProfiles
+          value: false
   sources: []
   project: default
   syncPolicy:
