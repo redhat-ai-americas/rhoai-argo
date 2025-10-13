@@ -4,6 +4,7 @@ kind: OdhDashboardConfig
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
   labels:
     app.kubernetes.io/part-of: rhods-dashboard
     app.opendatahub.io/rhods-dashboard: "true"

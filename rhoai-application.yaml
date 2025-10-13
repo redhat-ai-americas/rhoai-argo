@@ -15,9 +15,9 @@ spec:
         - name: channel
           value: fast
         - name: dashboardConfig.disableModelCatalog
-          value: false
+          value: "false"
         - name: dashboardConfig.disableHardwareProfiles
-          value: false
+          value: "false"
   sources: []
   project: default
   syncPolicy:
