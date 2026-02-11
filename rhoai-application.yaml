@@ -9,21 +9,16 @@ spec:
   source:
     path: helm/
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: HEAD
+    targetRevision: rhoai-3.x
     helm:
       parameters:
         - name: channel
-          value: fast
+          value: "fast-3.x"
         - name: dashboardConfig.disableModelCatalog
-          value: "false"
-        - name: dashboardConfig.disableHardwareProfiles
           value: "false"
   sources: []
   project: default
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     retry:
       limit: 10
       backoff:

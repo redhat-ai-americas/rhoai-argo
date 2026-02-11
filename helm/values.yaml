@@ -1,44 +1,42 @@
-channel: "stable"
+channel: "fast-3.x"
 operatorReplicas: 1
 dashboardReplicas: 1
-advancedServing: &advancedServing "Removed"
+# advancedServing: &advancedServing "Removed"
 
 dataScienceCluster:
   create: true
 
   components:
-    codeflare:
-      managementState: Removed
+    # codeflare:
+    #   managementState: Removed
     kserve:
       managementState: Managed
       nim:
         managementState: Managed
-      defaultDeploymentMode: RawDeployment
       rawDeploymentServiceConfig: Headed
-      serving:
-        ingressGateway:
-          certificate:
-            type: OpenshiftDefaultIngress
-        managementState: *advancedServing
-        name: knative-serving
     modelregistry:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
+    feastoperator:
+      managementState: Managed
     trustyai:
       managementState: Managed
+    aipipelines:
+      argoWorkflowsControllers:
+        managementState: Managed
     ray:
       managementState: Managed
     kueue:
-      managementState: Managed
+      defaultClusterQueueName: default
+      defaultLocalQueueName: default
+      managementState: Unmanaged
     workbenches:
       managementState: Managed
       workbenchNamespace: rhods-notebooks
     dashboard:
       managementState: Managed
-    modelmeshserving:
-      managementState: Removed
-    datasciencepipelines:
-      managementState: Managed
+    # modelmeshserving:
+    #   managementState: Removed
     trainingoperator:
       managementState: Managed
     llamastackoperator:
@@ -47,7 +45,10 @@ dataScienceCluster:
 userGroups:
   - system:authenticated
 
-dashboardConfig: {}
+dashboardConfig:
+  genAiStudio: true
+  modelAsService: true
+  mlflow: true
 
 defaultWorkbenchPvcSize: 20Gi
 showJupyterInEnabledApplications: true
