@@ -29,7 +29,7 @@ dataScienceCluster:
     kueue:
       defaultClusterQueueName: default
       defaultLocalQueueName: default
-      managementState: Unmanaged ## 👈👈 Should be Removed or Unmanaged
+      managementState: Unmanaged
     workbenches:
       managementState: Managed
       workbenchNamespace: rhods-notebooks

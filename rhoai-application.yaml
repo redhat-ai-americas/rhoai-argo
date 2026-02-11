@@ -8,7 +8,7 @@ spec:
     namespace: default
   source:
     path: helm/
-    repoURL: https://github.com/aokugel/rhoai-argo.git
+    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: rhoai-3.x
     helm:
       parameters:
