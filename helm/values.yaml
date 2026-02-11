@@ -7,8 +7,8 @@ dataScienceCluster:
   create: true
 
   components:
-    codeflare:
-      managementState: Removed
+    # codeflare:
+    #   managementState: Removed
     kserve:
       managementState: Managed
       nim:
@@ -35,8 +35,8 @@ dataScienceCluster:
       workbenchNamespace: rhods-notebooks
     dashboard:
       managementState: Managed
-    modelmeshserving:
-      managementState: Removed
+    # modelmeshserving:
+    #   managementState: Removed
     trainingoperator:
       managementState: Managed
     llamastackoperator:
