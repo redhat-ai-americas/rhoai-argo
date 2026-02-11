@@ -9,7 +9,7 @@ spec:
   source:
     path: helm/
     repoURL: https://github.com/aokugel/rhoai-argo.git
-    targetRevision: HEAD
+    targetRevision: rhoai-3.x
     helm:
       parameters:
         - name: channel
