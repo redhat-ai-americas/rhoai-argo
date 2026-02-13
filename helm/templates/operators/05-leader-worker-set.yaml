@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "5"
   name: leader-worker-set
-  namespace: openshift-operators
+  namespace: openshift-lws-operator
 spec:
   channel: stable-v1.0
   installPlanApproval: Manual

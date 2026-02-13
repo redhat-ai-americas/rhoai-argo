@@ -14,8 +14,6 @@ spec:
       parameters:
         - name: channel
           value: "fast-3.x"
-        - name: dashboardConfig.disableModelCatalog
-          value: "false"
   sources: []
   project: default
   syncPolicy:
