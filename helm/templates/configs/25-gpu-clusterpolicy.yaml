@@ -39,6 +39,7 @@ spec:
       nlsEnabled: true
     enabled: true
     kernelModuleType: proprietary
+    version: {{ .Values.nvidiaGpuVersion }}
     useOpenKernelModules : false
     certConfig:
       name: ''
