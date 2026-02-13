@@ -23,7 +23,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "30"
 spec:
   channel: {{ .Values.channel }}
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: rhods-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace

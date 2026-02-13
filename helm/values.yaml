@@ -1,14 +1,11 @@
 channel: "fast-3.x"
 operatorReplicas: 1
 dashboardReplicas: 1
-# advancedServing: &advancedServing "Removed"
 
 dataScienceCluster:
   create: true
 
   components:
-    # codeflare:
-    #   managementState: Removed
     kserve:
       managementState: Managed
       nim:
@@ -35,8 +32,6 @@ dataScienceCluster:
       workbenchNamespace: rhods-notebooks
     dashboard:
       managementState: Managed
-    # modelmeshserving:
-    #   managementState: Removed
     trainingoperator:
       managementState: Managed
     llamastackoperator:
