@@ -1,7 +1,7 @@
 rhoaiChannel: "fast-3.x"
 rhoaiVersion: "rhods-operator-3.2.0"
 nvidiaGpuChannel: "v25.3"
-nvidiaGpuVersion: '25.3.0'
+nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
 nvidiaGpuDriverVersion: 575.57.08
 operatorReplicas: 1
 dashboardReplicas: 1
