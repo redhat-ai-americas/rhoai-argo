@@ -1,8 +1,10 @@
 rhoaiChannel: "fast-3.x"
-rhoaiVersion: "rhods-operator-3.2.0"
+rhoaiVersion: "rhods-operator.3.2.0"
 nvidiaGpuChannel: "v25.3"
-nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
+nvidiaGpuVersion: 'gpu-operator-certified.v25.3.4'
 nvidiaGpuDriverVersion: 575.57.08
+kueue: &kueue "Unmanaged"
+
 operatorReplicas: 1
 dashboardReplicas: 1
 
@@ -30,7 +32,7 @@ dataScienceCluster:
     kueue:
       defaultClusterQueueName: default
       defaultLocalQueueName: default
-      managementState: Unmanaged
+      managementState: *kueue
     workbenches:
       managementState: Managed
       workbenchNamespace: rhods-notebooks
@@ -39,7 +41,7 @@ dataScienceCluster:
     mlflowoperator:
       managementState: Managed
     trainer:
-      managementState: Managed
+      managementState: Removed
     trainingoperator:
       managementState: Managed
     llamastackoperator:
