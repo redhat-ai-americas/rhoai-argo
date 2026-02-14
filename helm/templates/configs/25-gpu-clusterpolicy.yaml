@@ -39,6 +39,8 @@ spec:
       nlsEnabled: true
     enabled: true
     kernelModuleType: proprietary
+    repository: nvcr.io/nvidia
+    image: driver
     version: {{ .Values.nvidiaGpuVersion }}
     useOpenKernelModules : false
     certConfig:

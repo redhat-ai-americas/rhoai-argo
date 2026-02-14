@@ -12,7 +12,7 @@ spec:
     targetRevision: rhoai-3.x
     helm:
       parameters:
-        - name: channel
+        - name: rhoaiChannel
           value: "fast-3.x"
   sources: []
   project: default
