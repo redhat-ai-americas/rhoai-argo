@@ -41,7 +41,7 @@ spec:
     kernelModuleType: proprietary
     repository: nvcr.io/nvidia
     image: driver
-    version: {{ .Values.nvidiaGpuVersion }}
+    version: {{ .Values.nvidiaGpuDriverVersion }}
     useOpenKernelModules : false
     certConfig:
       name: ''
