@@ -14,9 +14,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
   name: openshift-kueue-operator-group
   namespace: openshift-kueue-operator
-spec:
-  targetNamespaces:
-    - openshift-kueue-operator
+spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
