@@ -1,0 +1,10 @@
+{{- if not (eq .Values.trainer "Removed") }}
+apiVersion: operator.openshift.io/v1
+kind: JobSetOperator
+metadata:
+  name: cluster
+spec:
+  logLevel: Normal
+  managementState: Managed
+  operatorLogLevel: Normal
+{{- end }}

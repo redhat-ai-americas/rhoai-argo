@@ -4,6 +4,7 @@ nvidiaGpuChannel: "v25.3"
 nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
 nvidiaGpuDriverVersion: 575.57.08
 kueue: &kueue "Unmanaged"
+trainer: &trainer "Managed"
 
 operatorReplicas: 1
 dashboardReplicas: 1
@@ -41,9 +42,9 @@ dataScienceCluster:
     mlflowoperator:
       managementState: Managed
     trainer:
-      managementState: Removed
+      managementState: *trainer
     trainingoperator:
-      managementState: Managed
+      managementState: Removed
     llamastackoperator:
       managementState: Managed
 
