@@ -14,7 +14,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
   name: openshift-jobset-operator-group
   namespace: openshift-jobset-operator
-spec: {}
+spec:
+  targetNamespaces: 
+    - openshift-jobset-operator
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
