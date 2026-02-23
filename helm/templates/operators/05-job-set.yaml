@@ -10,7 +10,7 @@ apiVersion: operators.coreos.com/v1alpha2
 kind: OperatorGroup
 metadata:
   annotations:
-    olm.providedAPIs: Kueue.v1.kueue.openshift.io
+    olm.providedAPIs: JobSetOperator.v1.operator.openshift.io
     argocd.argoproj.io/sync-wave: "2"
   name: openshift-jobset-operator-group
   namespace: openshift-jobset-operator
@@ -28,7 +28,7 @@ metadata:
 spec:
   channel: stable-v1.0
   installPlanApproval: Manual
-  name: jobset-operator
+  name: job-set
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   startingCSV: jobset-operator.v1.0.0
