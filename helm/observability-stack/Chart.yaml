@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rhoai-observability-tools-gitops
+description: GitOps for installing Red Hat OpenShift AI observability tools.
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+

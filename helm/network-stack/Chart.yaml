@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rhoai-network-tools-gitops
+description: GitOps for installing Red Hat OpenShift AI network tools.
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+

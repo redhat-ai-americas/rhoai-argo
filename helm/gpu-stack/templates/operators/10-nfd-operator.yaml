@@ -25,7 +25,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "10"
 spec:
   channel: "stable"
-  installPlanApproval: Manual
+  installPlanApproval: {{ .Values.global.installPlanApproval | default "Manual" }}
   name: nfd
   source: redhat-operators
   sourceNamespace: openshift-marketplace

@@ -25,7 +25,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "20"
 spec:
   channel: {{ .Values.nvidiaGpuChannel }}
-  installPlanApproval: Manual
+  installPlanApproval: {{ .Values.global.installPlanApproval | default "Manual" }}
   {{- if .Values.nvidiaGpuVersion }}
   startingCSV: {{ .Values.nvidiaGpuVersion }}
   {{- end }}
