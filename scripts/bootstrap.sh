@@ -51,7 +51,10 @@ echo "  ✅ CRDs ready."
 echo "[4/6] Finalizing GitOps environment..."
 
 # Wait for server deployment
-until oc get deployment openshift-gitops-server -n openshift-gitops &> /dev/null; do sleep 2; done
+while ! oc get deployment openshift-gitops-server -n openshift-gitops &> /dev/null; do
+  echo "  ...waiting for GitOps service to appear"
+  sleep 10
+done
 oc wait --for=condition=Available deployment/openshift-gitops-server -n openshift-gitops --timeout=300s
 echo "  ✅ ArgoCD server is active."
 
