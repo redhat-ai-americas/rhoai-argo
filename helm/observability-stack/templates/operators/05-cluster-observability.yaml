@@ -28,4 +28,4 @@ spec:
   name: cluster-observability-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  installPlanApproval: {{ .Values.global.installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}

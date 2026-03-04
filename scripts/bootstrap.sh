@@ -33,7 +33,7 @@ fi
 
 # Apply permissions immediately (Idempotent)
 echo "  🔐 Applying GitOps cluster permissions..."
-oc apply -f "${BOOTSTRAP_DIR}/gitops-permissions.yaml"
+oc apply -f "${BOOTSTRAP_DIR}/gitops-permission.yaml"
 
 # -------------------------------------------------------------------
 # [3/6] Wait for CRDs
@@ -64,13 +64,13 @@ APPS=(
     "network-operators.yaml"
     "observability-operators.yaml"
     "gpu-installation.yaml"
-    "rhoai-applications.yaml"
+    "rhoai-application.yaml"
 )
 
 for app in "${APPS[@]}"; do
     if [ -f "${APPS_DIR}/${app}" ]; then
         echo "  Applying ${app}..."
-        oc apply -f "${APPS_DIR}/${app}"
+        oc apply -f "${APPS_DIR}/${app}" -n openshift-gitops
     else
         echo "  ⚠️  Skipping ${app} (File not found)"
     fi

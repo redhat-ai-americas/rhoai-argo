@@ -9,7 +9,7 @@ spec:
   source:
     path: helm/network-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: rhoai-3.x
+    targetRevision: gpu-app-breakout
     helm:
       parameters:
         - name: rhoaiChannel
