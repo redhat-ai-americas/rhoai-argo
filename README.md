@@ -2,23 +2,17 @@
 
 Deployment of Red Hat OpenShift AI (RHOAI) and its required infrastructure stack using Helm and ArgoCD.
 
-## Overview
+To initialize RHOAI, use the provided bootstrap script. This script installs OpenShift GitOps if the user has not already. It will enable gitops permissions and trigger the "App-of-Apps" deployment.
 
-This repository provides a modular, "layered" approach to deploying a production-ready AI environment on OpenShift. By splitting the infrastructure into distinct layers, we ensure that hardware discovery, networking, and GPU acceleration are fully operational before the RHOAI dashboard and notebooks are deployed.
-
-## Getting Started
-
-To initialize the cluster and deploy all infrastructure layers, use the provided bootstrap script. This script installs the OpenShift GitOps operator, configures necessary permissions, and triggers the "App-of-Apps" deployment.
-
-### 1. Default Installation (Manual Approval)
-By default, the operators will require manual approval for any version upgrades or initial `InstallPlans` in the OpenShift Console.
+### Option 1. Default Installation (Manual Update Approval)
+By default, the operators will require manual approval for any version upgrades in the OpenShift Console.
 
 ```bash
 ./scripts/bootstrap.sh
 ```
 
-### 2. Automated Installation (Optional)
-To allow the cluster to automatically install operators and handle future patches (including dependencies like Service Mesh or Serverless) without manual intervention, use the `--set` flag:
+### Option 2. Install with Automatic Updates for RHOAI Dependencies (Not Automatic updates for RHOAI itself)
+To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, use the `--set` flag:
 
 ```bash
 ./scripts/bootstrap.sh --set global.installPlanApproval=Automatic

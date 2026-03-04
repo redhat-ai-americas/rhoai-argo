@@ -19,7 +19,9 @@ spec:
           value: {{ .Values.global.installPlanApproval | default "Manual" }}
   project: default
   syncPolicy:
-    automated: {}
+    automated:
+      prune: true
+      selfHeal: true
     retry:
       limit: 10
       backoff:
