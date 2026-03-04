@@ -46,14 +46,33 @@ done
 echo "  ✅ CRDs ready."
 
 # -------------------------------------------------------------------
-# [4/6] Wait for ArgoCD Server
+# [4/6] Wait for ArgoCD Server & Enable Plugin
 # -------------------------------------------------------------------
-echo "[4/6] Waiting for ArgoCD server deployment..."
-# The operator creates the namespace 'openshift-gitops' automatically
-until oc get deployment openshift-gitops-server -n openshift-gitops &> /dev/null; do sleep 2; done
+echo "[4/6] Finalizing GitOps environment..."
 
+# Wait for server deployment
+until oc get deployment openshift-gitops-server -n openshift-gitops &> /dev/null; do sleep 2; done
 oc wait --for=condition=Available deployment/openshift-gitops-server -n openshift-gitops --timeout=300s
 echo "  ✅ ArgoCD server is active."
+
+# Check if the GitOps plugin is already enabled in the console
+CURRENT_PLUGINS=$(oc get console.operator.openshift.io cluster -o jsonpath='{.spec.plugins}')
+
+if [[ "$CURRENT_PLUGINS" == *"gitops-plugin"* ]]; then
+    echo "  🎨 GitOps Console Plugin is already enabled. Skipping patch."
+else
+    echo "  🎨 Enabling GitOps Console UI Plugin..."
+    
+    # Ensure the plugin resource itself exists before trying to enable it
+    until oc get consoleplugin gitops-plugin &> /dev/null; do
+      echo "    ...waiting for gitops-plugin CR..."
+      sleep 5
+    done
+
+    # Patch the console to add the plugin to the existing list
+    oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"plugins":["gitops-plugin"]}}'
+    echo "  ✅ GitOps tab enabled. (Refresh your browser to see it)."
+fi
 
 # -------------------------------------------------------------------
 # [5/6] Create the ArgoCD Applications
