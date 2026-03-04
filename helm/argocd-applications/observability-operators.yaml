@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: observability-tools-installation
+  name: observability-stack
 spec:
   destination:
     name: in-cluster
@@ -14,9 +14,11 @@ spec:
       parameters:
         - name: rhoaiChannel
           value: "fast-3.x"
-  sources: []
+        - name: "global.installPlanApproval"
+          value: {{ .Values.global.installPlanApproval | default "Manual" }}
   project: default
   syncPolicy:
+    automated: {}
     retry:
       limit: 10
       backoff:

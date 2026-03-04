@@ -63,6 +63,8 @@ echo "[5/6] Deploying ArgoCD Stack Applications..."
 APPS=(
     "network-operators.yaml"
     "observability-operators.yaml"
+    "scaling-operators.yaml"
+    "hardware-operators.yaml"
     "gpu-installation.yaml"
     "rhoai-application.yaml"
 )

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rhoai-autoscalling-tools-gitops
+description: GitOps for installing Red Hat OpenShift KEDA
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+

@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: network-operators
+  name: dynamic-scaling
 spec:
   destination:
     name: in-cluster
     namespace: default
   source:
-    path: helm/network-stack
+    path: helm/dynamic-scaling
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:
