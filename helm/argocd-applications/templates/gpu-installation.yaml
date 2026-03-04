@@ -1,13 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dynamic-scaling
+  name: gpu-installation
+  namespace: openshift-gitops
 spec:
   destination:
     name: in-cluster
     namespace: default
   source:
-    path: helm/dynamic-scaling
+    path: helm/gpu-installation
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:

@@ -1,13 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: observability-stack
+  name: network-operators
+  namespace: openshift-gitops
 spec:
   destination:
     name: in-cluster
     namespace: default
   source:
-    path: helm/observability-stack
+    path: helm/network-fabric
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:

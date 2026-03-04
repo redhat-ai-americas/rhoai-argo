@@ -51,9 +51,6 @@ dataScienceCluster:
 userGroups:
   - system:authenticated
 
-global:
-  installPlanApproval: Manual
-
 dashboardConfig:
   genAiStudio: true
   modelAsService: true

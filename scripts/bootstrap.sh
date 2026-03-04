@@ -89,11 +89,12 @@ APPS=(
 )
 
 for app in "${APPS[@]}"; do
-    if [ -f "${APPS_DIR}/${app}" ]; then
-        echo "  Applying ${app}..."
-        oc apply -f "${APPS_DIR}/${app}" -n openshift-gitops
+    if [ -f "${APPS_DIR}/templates/${app}" ]; then
+        echo "  🚀 Rendering and Applying ${app}..."
+        
+        helm template "${APPS_DIR}" -s "templates/${app}" "$@" | oc apply -f -
     else
-        echo "  ⚠️  Skipping ${app} (File not found)"
+        echo "  ⚠️  Skipping ${app} (File not found in ${APPS_DIR}/templates/)"
     fi
 done
 
