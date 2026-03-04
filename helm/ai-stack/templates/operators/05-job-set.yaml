@@ -29,7 +29,7 @@ metadata:
   namespace: openshift-jobset-operator
 spec:
   channel: stable-v1.0
-  installPlanApproval: {{ .Values.global.installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
   name: job-set
   source: redhat-operators
   sourceNamespace: openshift-marketplace
