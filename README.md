@@ -7,7 +7,7 @@ Deployment of Red Hat OpenShift AI (RHOAI) and its required infrastructure stack
 
 To initialize RHOAI, install OpenShift GitOps if you haven't already, configure gitops permissions, and trigger the "App-of-Apps" deployment.
 
-## 1. Check if the Openshift GitOps Subscription already exists. If not, apply it. Additionally, configure permissions for the Service Account.
+### 1. Check if the Openshift GitOps Subscription already exists. If not, apply it. Additionally, configure permissions for the Service Account.
 
 ```bash
 oc get subscription openshift-gitops-operator -n openshift-operators || oc apply -f gitops-config/openshift-gitops-subscription.yaml
@@ -15,7 +15,7 @@ oc get subscription openshift-gitops-operator -n openshift-operators || oc apply
 oc apply -f gitops-config/gitops-permission.yaml
 ```
 
-## 2. Trigger the "App-of-Apps" deployment
+### 2. Trigger the "App-of-Apps" deployment
 
 ### Option 1 - Default Installation (Manual Update Approval)
 By default, the operators will require manual approval for any version upgrades in the OpenShift Console.
@@ -23,16 +23,6 @@ By default, the operators will require manual approval for any version upgrades 
 ```bash
 oc apply -f app-of-apps.yaml
 ```
-
-In your Openshift Dashboard, Navigate to Home > Search, type "InstallPlan" in the resource bar and select the resource type. Approve operator installations when they appear by clicking the specific InstallPlan > View InstallPlan > Approve.
-
-If you would like to approve all of the currently waiting InstallPlans you can run the following command:
-
-```bash
-oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
-```
-
-> **Note:** The ServiceMesh Operator installed by RHOAI is not the most current version, as such, the InstallPlan for the update will appear regardless of whether Manual or Automatic Approval is used. The InstallPlan can be rejected or ignored.
 
 ### Option 2 - Install with Automatic Updates for RHOAI Dependencies (Not Automatic updates for RHOAI itself)
 To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, patch the global installPlanApproval to Automatic:
@@ -42,7 +32,7 @@ oc patch application app-of-apps -n openshift-gitops --type merge -p \
 '{"spec":{"source":{"helm":{"valuesObject":{"global":{"installPlanApproval":"Automatic"}}}}}}'
 ```
 
-## 3. Open ArgoCD and monitor sync progress
+## 3. Open ArgoCD and monitor InstallPlan progress
 
 The ArgoCD application icon is available at the top of the OpenshiftDashboard in the Waffle Menu Icon. Alternatively, retrieve the url direcrtly from the terminal.
 
@@ -51,6 +41,17 @@ The ArgoCD application icon is available at the top of the OpenshiftDashboard in
 oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}'
 ```
 
+### If you chose the Manual Installation, you will need to approve operators as they attempt to install.
+
+- In your Openshift Dashboard, Navigate to Home > Search, type "InstallPlan" in the resource bar and select the resource type. Approve operator installations when they appear by clicking the specific InstallPlan > View InstallPlan > Approve.
+
+- (Optional) If you would like to approve all of the currently waiting InstallPlans you can run the following command:
+
+```bash
+oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
+```
+
+> **Note:** The ServiceMesh Operator installed by RHOAI is not the most current version, as such, the InstallPlan for the update will appear regardless of whether Manual or Automatic Approval is used. The InstallPlan can be rejected or ignored.
 ## Manual Steps After Sync
 
 Some steps are cluster-specific and cannot be fully automated via GitOps:
@@ -89,9 +90,9 @@ Some steps are cluster-specific and cannot be fully automated via GitOps:
 |-----------|-----------|-------------|
 | 0 | Namespaces | All operators |
 | 5 | RHOAI Dependencies | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability |
-| 7 | Operator Configs | cluster-job-set, cma-controller|
+| 7 | Configs | cluster-job-set, cma-controller|
 | 10 | GPU Dependencies| nfd-operator |
-| 15 | Operator Configs | nfd-instance |
+| 15 | Configs | nfd-instance |
 | 20 | NVIDIA GPU Operator| gpu-operator |
 | 25 | GPU Cluster Policy | gpu-clusterpolicy |
 | 30 | RHOAI Operator Group + Subscription | rhoai-operator |
