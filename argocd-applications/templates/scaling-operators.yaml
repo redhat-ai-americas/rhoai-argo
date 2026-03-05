@@ -1,22 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hardware-management-tools
+  name: dynamic-scaling
   namespace: openshift-gitops
 spec:
   destination:
     name: in-cluster
     namespace: default
   source:
-    path: helm/hardware-management
+    path: helm/dynamic-scaling
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:
       parameters:
-        - name: rhoaiChannel
-          value: "fast-3.x"
         - name: "global.installPlanApproval"
-          value: {{ .Values.global.installPlanApproval | default "Manual" }}
+          value: {{ .Values.global.installPlanApproval | default "Manual" | quote }}
   project: default
   syncPolicy:
     automated:

@@ -23,7 +23,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "30"
 spec:
   channel: {{ .Values.rhoaiChannel }}
-  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
+  installPlanApproval: Manual
   {{- if .Values.rhoaiVersion }}
   startingCSV: {{ .Values.rhoaiVersion }}
   {{- end }}

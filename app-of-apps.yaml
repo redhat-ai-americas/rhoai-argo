@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+    path: argocd-applications
+    targetRevision: gpu-app-breakout
+    helm:
+      valuesObject:
+        global:
+          installPlanApproval: Manual
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true

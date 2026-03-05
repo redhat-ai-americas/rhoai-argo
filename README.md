@@ -2,21 +2,58 @@
 
 Deployment of Red Hat OpenShift AI (RHOAI) and its required infrastructure stack using Helm and ArgoCD.
 
-To initialize RHOAI, use the provided bootstrap script. This script installs OpenShift GitOps if the user has not already. It will enable gitops permissions and trigger the "App-of-Apps" deployment.
 
-### Option 1. Default Installation (Manual Update Approval)
+## Getting started
+
+To initialize RHOAI, install OpenShift GitOps if you haven't already, configure gitops permissions, and trigger the "App-of-Apps" deployment.
+
+## 1. Check if the Openshift GitOps Subscription already exists. If not, apply it. Additionally, configure permissions for the Service Account.
+
+```bash
+oc get subscription openshift-gitops-operator -n openshift-operators || oc apply -f gitops-config/openshift-gitops-subscription.yaml
+
+oc apply -f gitops-config/gitops-permission.yaml
+```
+
+## 2. Trigger the "App-of-Apps" deployment
+
+### Option 1 - Default Installation (Manual Update Approval)
 By default, the operators will require manual approval for any version upgrades in the OpenShift Console.
 
 ```bash
-./scripts/bootstrap.sh
+oc apply -f app-of-apps.yaml
 ```
 
-### Option 2. Install with Automatic Updates for RHOAI Dependencies (Not Automatic updates for RHOAI itself)
-To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, use the `--set` flag:
+### Option 2 - Install with Automatic Updates for RHOAI Dependencies (Not Automatic updates for RHOAI itself)
+To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, patch the global installPlanApproval to Automatic:
 
 ```bash
-./scripts/bootstrap.sh --set global.installPlanApproval=Automatic
+oc patch application app-of-apps -n openshift-gitops --type merge -p \
+'{"spec":{"source":{"helm":{"valuesObject":{"global":{"installPlanApproval":"Automatic"}}}}}}'
 ```
+
+## 3. Open ArgoCD and monitor sync progress
+
+The ArgoCD application icon is available at the top of the OpenshiftDashboard in the Waffle Menu Icon. Alternatively, retrieve the url direcrtly from the terminal.
+
+```bash
+# Get the ArgoCD URL
+oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}'
+```
+
+## Manual Steps After Sync
+
+Some steps are cluster-specific and cannot be fully automated via GitOps:
+
+1. **GPU MachineSet** - Create a GPU worker MachineSet for your cloud provider. See [RHOAI Installation Workshop Step 2](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/02-enable-gpu-support.md).
+
+2. **Hardware Profile** - Create a Hardware Profile in the RHOAI dashboard to enable GPU assignment to workloads:
+   - RHOAI Dashboard -> Settings -> Hardware profiles -> Create hardware profile
+   - Add resource: `nvidia.com/gpu`, default `1`, min `1`, max `1`
+   - Add toleration: operator `Exists`, effect `NoSchedule`, key `nvidia.com/gpu`
+   - See [RHOAI 3.2 Hardware Profiles docs](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html/working_with_accelerators/working-with-hardware-profiles_accelerators)
+
+3. **GPU Node Taints** (optional) - Prevent non-GPU workloads from scheduling on GPU nodes. See [RHOAI Installation Workshop Step 5](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/05-configure-gpu-sharing-method.md).
 
 ---
 
@@ -36,6 +73,21 @@ To allow the cluster to automatically handle future patches, besides RHOAI, with
 | **[Tempo](https://catalog.redhat.com/en/software/container-stacks/detail/64254fc5060863e2125a6186)** | High-scale distributed tracing backend |
 | **[Cluster Observability](https://docs.redhat.com/en/documentation/red_hat_openshift_cluster_observability_operator/1-latest)** | Standalone monitoring stacks for independent service configuration |
 
+## Following When Everything Gets Deployed
+
+| Sync Wave | Summary | Resources |
+|-----------|-----------|-------------|
+| 0 | Namespaces | All operators |
+| 5 | RHOAI Dependencies | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability |
+| 7 | Operator Configs | cluster-job-set, cma-controller|
+| 10 | GPU Dependencies| nfd-operator |
+| 15 | Operator Configs | nfd-instance |
+| 20 | NVIDIA GPU Operator| gpu-operator |
+| 25 | GPU Cluster Policy | gpu-clusterpolicy |
+| 30 | RHOAI Operator Group + Subscription | rhoai-operator |
+| 32 | RHOAI Deployment | operator-deployment |
+| 33 | DataScienceCluster resource configuration for RHOAI | datasciencecluster |
+| 35 | RHOAI dashboard configuration | odhdashboardconfig |
 
 ---
 
