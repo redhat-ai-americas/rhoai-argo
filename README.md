@@ -6,12 +6,18 @@ Deployment of Red Hat OpenShift AI (RHOAI) and its required infrastructure stack
 ## Getting started
 
 To initialize RHOAI, install OpenShift GitOps if you haven't already, configure gitops permissions, and trigger the "App-of-Apps" deployment.
+### 0. Clone the repository
 
-### 1. Check if the Openshift GitOps Subscription already exists. If not, apply it. Additionally, configure permissions for the Service Account.
+```bash
+git clone https://github.com/redhat-ai-americas/rhoai-argo.git
+cd rhoai-argo
+```
+
+### 1. Check if the Openshift GitOps Subscription already exists. If not, apply it. Additionally, configure permissions for the Service Account once the operator is ready.
 
 ```bash
 oc get subscription openshift-gitops-operator -n openshift-operators || oc apply -f gitops-config/openshift-gitops-subscription.yaml
-
+oc wait csv -n openshift-operators -l olm.owner=openshift-gitops-operator --for=condition=Succeeded --timeout=300s
 oc apply -f gitops-config/gitops-permission.yaml
 ```
 
@@ -28,8 +34,7 @@ oc apply -f app-of-apps.yaml
 To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, patch the global installPlanApproval to Automatic:
 
 ```bash
-oc patch application app-of-apps -n openshift-gitops --type merge -p \
-'{"spec":{"source":{"helm":{"valuesObject":{"global":{"installPlanApproval":"Automatic"}}}}}}'
+sed 's/installPlanApproval: Manual/installPlanApproval: Automatic/' app-of-apps.yaml | oc apply -f -
 ```
 
 ## 3. Open ArgoCD and monitor InstallPlan progress

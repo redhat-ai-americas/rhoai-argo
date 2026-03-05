@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: network-operators
+  name: network-fabric
   namespace: openshift-gitops
 spec:
   destination:
@@ -17,6 +17,7 @@ spec:
           value: "fast-3.x"
         - name: "global.installPlanApproval"
           value: {{ .Values.global.installPlanApproval | default "Manual" | quote }}
+  project: default
   syncPolicy:
     automated:
       prune: true

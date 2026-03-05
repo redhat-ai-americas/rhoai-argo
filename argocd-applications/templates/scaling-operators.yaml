@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dynamic-scaling
+  name: dynamic-scaling-operators
   namespace: openshift-gitops
 spec:
   destination:

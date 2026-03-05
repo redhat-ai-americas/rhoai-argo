@@ -22,3 +22,5 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   installPlanApproval: Automatic
+  console:
+    enabled: true
