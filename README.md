@@ -24,6 +24,16 @@ By default, the operators will require manual approval for any version upgrades 
 oc apply -f app-of-apps.yaml
 ```
 
+In your Openshift Dashboard, Navigate to Home > Search, type "InstallPlan" in the resource bar and select the resource type. Approve operator installations when they appear by clicking the specific InstallPlan > View InstallPlan > Approve.
+
+If you would like to approve all of the currently waiting InstallPlans you can run the following command:
+
+```bash
+oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
+```
+
+> **Note:** The ServiceMesh Operator installed by RHOAI is not the most current version, as such, the InstallPlan for the update will appear regardless of whether Manual or Automatic Approval is used. The InstallPlan can be rejected or ignored.
+
 ### Option 2 - Install with Automatic Updates for RHOAI Dependencies (Not Automatic updates for RHOAI itself)
 To allow the cluster to automatically handle future patches, besides RHOAI, without manual approval, patch the global installPlanApproval to Automatic:
 
@@ -94,3 +104,78 @@ Some steps are cluster-specific and cannot be fully automated via GitOps:
 ## References
 
 * [Upstream OpenShift AI Setup Reference](https://github.com/jharmison-redhat/openshift-setup/tree/main/charts/openshift-ai/templates)
+
+## Repository Structure
+
+```
+rhoai-argo/
+├── app-of-apps.yaml
+├── README.md
+├── gitops-config/
+│   ├── gitops-permission.yaml
+│   └── openshift-gitops-subscription.yaml
+├── argocd-applications/
+│   ├── Chart.yaml
+│   └── templates/
+│       ├── gpu-installation.yaml
+│       ├── hardware-operators.yaml
+│       ├── network-operators.yaml
+│       ├── observability-operators.yaml
+│       ├── rhoai-application.yaml
+│       └── scaling-operators.yaml
+└── helm/
+    ├── ai-stack/
+    │   ├── Chart.yaml
+    │   ├── values.yaml
+    │   └── templates/
+    │       ├── configs/
+    │       │   ├── 07-cluster-job-set.yaml
+    │       │   ├── 32-operator-deployment.yaml
+    │       │   ├── 33-datasciencecluster.yaml
+    │       │   ├── 35-dashboard-deployment.yaml
+    │       │   └── 35-odhdashboardconfig.yaml
+    │       └── operators/
+    │           ├── 05-job-set.yaml
+    │           ├── 05-leader-worker-set.yaml
+    │           ├── 05-rhbok.yaml
+    │           └── 30-rhoai-operator.yaml
+    ├── dynamic-scaling/
+    │   ├── Chart.yaml
+    │   └── templates/
+    │       ├── configs/
+    │       │   └── 07-cma-controller.yaml
+    │       └── operators/
+    │           └── 05-cma-operator.yaml
+    ├── gpu-installation/
+    │   ├── Chart.yaml
+    │   ├── values.yaml
+    │   └── templates/
+    │       ├── configs/
+    │       │   └── 25-gpu-clusterpolicy.yaml
+    │       └── operators/
+    │           └── 20-gpu-operator.yaml
+    ├── hardware-management/
+    │   ├── Chart.yaml
+    │   ├── values.yaml
+    │   └── templates/
+    │       ├── configs/
+    │       │   └── 15-nfd-instance.yaml
+    │       └── operators/
+    │           ├── 05-kmm.yaml
+    │           └── 10-nfd-operator.yaml
+    ├── network-fabric/
+    │   ├── Chart.yaml
+    │   └── templates/
+    │       ├── configs/
+    │       └── operators/
+    │           ├── 05-rhcl.yaml
+    │           └── 05-sriov.yaml
+    └── observability-stack/
+        ├── Chart.yaml
+        └── templates/
+            ├── configs/
+            └── operators/
+                ├── 05-cluster-observability.yaml
+                ├── 05-open-telemetry.yaml
+                └── 05-tempo.yaml
+```
