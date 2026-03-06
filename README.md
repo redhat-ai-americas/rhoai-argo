@@ -46,7 +46,7 @@ The ArgoCD application icon is available at the top of the OpenshiftDashboard in
 oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}'
 ```
 
-### If you chose the Manual Installation, you will need to approve operators as they attempt to install.
+### Approve the RHOAI InstallPlan once it requests approval. If you chose the Manual Installation, you will need to approve dependencies as they attempt to install first.
 
 - In your Openshift Dashboard, Navigate to Home > Search, type "InstallPlan" in the resource bar and select the resource type. Approve operator installations when they appear by clicking the specific InstallPlan > View InstallPlan > Approve.
 
@@ -57,9 +57,12 @@ oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs
 ```
 
 > **Note:** The ServiceMesh Operator installed by RHOAI is not the most current version, as such, the InstallPlan for the update will appear regardless of whether Manual or Automatic Approval is used. The InstallPlan can be rejected or ignored.
-## Manual Steps After Sync
 
-Some steps are cluster-specific and cannot be fully automated via GitOps:
+## Wait for the rhoai-deployment ArgoCD application to reach a Healthy state, and you're installed! Enjoy using RHOAI!
+
+> **Note:**  Some steps are cluster-specific and cannot be fully automated via GitOps:
+
+## Manual Steps After Sync
 
 1. **GPU MachineSet** - Create a GPU worker MachineSet for your cloud provider. See [RHOAI Installation Workshop Step 2](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/02-enable-gpu-support.md).
 
@@ -130,28 +133,28 @@ rhoai-argo/
 │       ├── rhoai-application.yaml
 │       └── scaling-operators.yaml
 └── helm/
-    ├── ai-stack/
+    ├── rhoai-stack/
     │   ├── Chart.yaml
     │   ├── values.yaml
     │   └── templates/
     │       ├── configs/
-    │       │   ├── 07-cluster-job-set.yaml
     │       │   ├── 32-operator-deployment.yaml
     │       │   ├── 33-datasciencecluster.yaml
     │       │   ├── 35-dashboard-deployment.yaml
     │       │   └── 35-odhdashboardconfig.yaml
     │       └── operators/
-    │           ├── 05-job-set.yaml
-    │           ├── 05-leader-worker-set.yaml
-    │           ├── 05-rhbok.yaml
     │           └── 30-rhoai-operator.yaml
-    ├── dynamic-scaling/
+    ├── workload-scaling/
     │   ├── Chart.yaml
     │   └── templates/
     │       ├── configs/
+    │       │   ├── 07-cluster-job-set.yaml
     │       │   └── 07-cma-controller.yaml
     │       └── operators/
-    │           └── 05-cma-operator.yaml
+    │           ├── 05-cma-operator.yaml
+    │           ├── 05-job-set.yaml
+    │           ├── 05-leader-worker-set.yaml
+    │           └── 05-rhbok.yaml
     ├── gpu-installation/
     │   ├── Chart.yaml
     │   ├── values.yaml

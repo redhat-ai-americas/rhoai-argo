@@ -8,7 +8,7 @@ spec:
     name: in-cluster
     namespace: default
   source:
-    path: helm/ai-stack
+    path: helm/rhoai-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:
