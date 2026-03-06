@@ -21,11 +21,14 @@ cd rhoai-argo
 # Apply Subscription if missing
 oc get subscription openshift-gitops-operator -n openshift-operators || oc apply -f gitops-config/openshift-gitops-subscription.yaml
 
-# Wait for the operator to be ready
-oc wait csv -n openshift-operators -l olm.owner=openshift-gitops-operator --for=condition=Succeeded --timeout=300s
-
 # Configure cluster permissions
 oc apply -f gitops-config/gitops-permission.yaml
+
+#Wait for the CSV to appear (The "Gap Filler")
+until oc get csv -n openshift-operators -l olm.owner=openshift-gitops-operator 2>/dev/null | grep -q "openshift-gitops"; do sleep 10; done
+
+# Enable Console Sidebar tab
+oc patch console.operator cluster --type=merge -p '{"spec":{"plugins":["gitops-plugin"]}}'
 ```
 
 ---
@@ -35,7 +38,7 @@ oc apply -f gitops-config/gitops-permission.yaml
 - Choose one of the following installation strategies. This uses the **App-of-Apps** pattern to orchestrate infrastructure layers in sync waves.
 
 ### Option A: Default Installation (Manual Approval)
-Operators will require manual approval for any version upgrades in the OpenShift Console.
+- Operators will require manual approval for any version upgrades in the OpenShift Console.
 ```bash
 oc apply -f app-of-apps.yaml
 ```
@@ -62,17 +65,19 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 > [!NOTE]
 > You must approve the RHOAI InstallPlan once it requests approval. If you chose **Option A**, you must also approve all infrastructure dependencies.
 
+
 1. In the OpenShift Dashboard, navigate to **Home > Search**.
 2. Type **"InstallPlan"** in the search bar and select the resource type.
-3. Approve operator installations by clicking **Specific InstallPlan > View InstallPlan > Approve**.
+3. Initiate operator installations by clicking **Installxxxxx > Preview InstallPlan > Approve**.
 
+---
 
 > [!NOTE]
-> The Service Mesh Operator installed by RHOAI may trigger an update InstallPlan regardless of your approval setting. This can be rejected or ignored.
+> The Service Mesh Operator, automatically installed by RHOAI, is not the most current version. The update/InstallPlan to the latest version can be denied or ignored.
 
 
 > [!TIP]
-> **Bulk Approval:** To approve all currently waiting InstallPlans at once, run:
+> **Bulk Approval:** To approve all currently waiting InstallPlans at once (the additional Servish Mesh version does not break anything), run:
 > ```bash
 > oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
 > ```
