@@ -15,7 +15,7 @@ cd rhoai-argo
 ```
 
 ### 1. Prepare OpenShift GitOps
-Check if the OpenShift GitOps Subscription exists. If not, apply it and configure permissions for the Service Account once the operator is ready.
+- Check if the OpenShift GitOps Subscription exists. If not, apply it and configure permissions for the Service Account once the operator is ready.
 
 ```bash
 # Apply Subscription if missing
@@ -32,7 +32,7 @@ oc apply -f gitops-config/gitops-permission.yaml
 
 ## 📦 2. Trigger "App-of-Apps" Deployment
 
-Choose one of the following installation strategies. This uses the **App-of-Apps** pattern to orchestrate infrastructure layers in sync waves.
+- Choose one of the following installation strategies. This uses the **App-of-Apps** pattern to orchestrate infrastructure layers in sync waves.
 
 ### Option A: Default Installation (Manual Approval)
 Operators will require manual approval for any version upgrades in the OpenShift Console.
@@ -41,7 +41,8 @@ oc apply -f app-of-apps.yaml
 ```
 
 ### Option B: Automatic Update Installation
-This allows the cluster to automatically handle future patches for dependencies (Hardware, Network, etc.). **Note:** RHOAI itself will remain on Manual approval.
+- This allows the cluster to automatically handle future patches for dependencies (Hardware, Network, etc.). **Note:** RHOAI itself will remain on Manual approval.
+
 ```bash
 sed 's/installPlanApproval: Manual/installPlanApproval: Automatic/' app-of-apps.yaml | oc apply -f -
 ```
@@ -50,7 +51,7 @@ sed 's/installPlanApproval: Manual/installPlanApproval: Automatic/' app-of-apps.
 
 ## 🖥️ 3. Monitor and Approve Installation
 
-The ArgoCD dashboard is available via the **Waffle Menu** in the OpenShift Console header. Alternatively, retrieve the URL directly:
+- The ArgoCD dashboard is available via the **Waffle Menu** in the OpenShift Console header. Alternatively, retrieve the URL directly:
 
 ```bash
 # Get the ArgoCD URL
@@ -58,11 +59,17 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 ```
 
 ### Approve InstallPlans
-You must approve the RHOAI InstallPlan once it requests approval. If you chose **Option A**, you must also approve all infrastructure dependencies.
+> [!NOTE]
+> You must approve the RHOAI InstallPlan once it requests approval. If you chose **Option A**, you must also approve all infrastructure dependencies.
 
 1. In the OpenShift Dashboard, navigate to **Home > Search**.
 2. Type **"InstallPlan"** in the search bar and select the resource type.
 3. Approve operator installations by clicking **Specific InstallPlan > View InstallPlan > Approve**.
+
+
+> [!NOTE]
+> The Service Mesh Operator installed by RHOAI may trigger an update InstallPlan regardless of your approval setting. This can be rejected or ignored.
+
 
 > [!TIP]
 > **Bulk Approval:** To approve all currently waiting InstallPlans at once, run:
@@ -70,13 +77,13 @@ You must approve the RHOAI InstallPlan once it requests approval. If you chose *
 > oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
 > ```
 
-**Wait for the `rhoai-deployment` ArgoCD application to reach a Healthy state. Enjoy using RHOAI!**
+**Wait for the `rhoai-deployment` ArgoCD application to reach a Healthy state, and... Enjoy using RHOAI!**
 
 ---
 
 ## 🛠️ 4. Manual Post-Sync Steps
 
-Some steps are cluster-specific and cannot be fully automated via GitOps:
+**Some steps are cluster-specific and cannot be fully automated via GitOps:**
 
 1. **GPU MachineSet:** Create a GPU worker MachineSet for your cloud provider. See [Enable GPU Support Docs](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/02-enable-gpu-support.md).
 2. **Hardware Profile:** Create a Hardware Profile in the RHOAI dashboard:
@@ -86,10 +93,6 @@ Some steps are cluster-specific and cannot be fully automated via GitOps:
    - Ref: [RHOAI 3.2 Hardware Profiles](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html/working_with_accelerators/working-with-hardware-profiles_accelerators).
 3. **GPU Node Taints (Optional):** Prevent non-GPU workloads from scheduling on GPU nodes. See [Configure GPU Sharing](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/05-configure-gpu-sharing-method.md).
 
----
-
-> [!NOTE]
-> The Service Mesh Operator installed by RHOAI may trigger an update InstallPlan regardless of your approval setting. This can be rejected or ignored.
 ---
 
 ## RHOAI 3.x Dependencies
