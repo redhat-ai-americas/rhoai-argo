@@ -24,7 +24,7 @@ oc get subscription openshift-gitops-operator -n openshift-operators || oc apply
 # Configure cluster permissions
 oc apply -f gitops-config/gitops-permission.yaml
 
-#Wait for the CSV to appear (The "Gap Filler")
+# Wait for the CSV to appear (The "Gap Filler")
 until oc get csv -n openshift-operators -l olm.owner=openshift-gitops-operator 2>/dev/null | grep -q "openshift-gitops"; do sleep 10; done
 
 # Enable Console Sidebar tab
@@ -35,7 +35,7 @@ oc patch console.operator cluster --type=merge -p '{"spec":{"plugins":["gitops-p
 
 ## 📦 2. Trigger "App-of-Apps" Deployment
 
-- Choose one of the following installation strategies. This uses the **App-of-Apps** pattern to orchestrate infrastructure layers in sync waves.
+- Choose one of the following installation strategies. Both use the **App-of-Apps** pattern with sync waves, which you can find the details of down below.
 
 ### Option A: Default Installation (Manual Approval)
 - Operators will require manual approval for any version upgrades in the OpenShift Console.
@@ -116,7 +116,7 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 | **[Tempo](https://catalog.redhat.com/en/software/container-stacks/detail/64254fc5060863e2125a6186)** | High-scale distributed tracing backend |
 | **[Cluster Observability](https://docs.redhat.com/en/documentation/red_hat_openshift_cluster_observability_operator/1-latest)** | Standalone monitoring stacks for independent service configuration |
 
-## Following When Everything Gets Deployed
+## Sync Wave Architecture
 
 | Sync Wave | Summary | Resources |
 |-----------|-----------|-------------|
