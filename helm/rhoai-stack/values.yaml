@@ -1,5 +1,5 @@
-rhoaiChannel: "fast-3.x"
-rhoaiVersion: "rhods-operator.3.2.0"
+rhoaiChannel: "stable-3.3"
+rhoaiVersion: "rhods-operator.3.3.0"
 nvidiaGpuChannel: "v25.3"
 nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
 nvidiaGpuDriverVersion: 575.57.08
