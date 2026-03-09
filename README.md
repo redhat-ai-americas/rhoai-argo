@@ -73,7 +73,7 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 ---
 
 > [!NOTE]
-> The Service Mesh Operator, automatically installed by RHOAI, is not the most current version. The update/InstallPlan to the latest version can be denied or ignored.
+> The Service Mesh Operator, automatically installed by RHOAI, is not the most current version. The update/InstallPlan to the latest version can be ignored.
 
 
 > [!TIP]

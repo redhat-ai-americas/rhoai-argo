@@ -13,8 +13,6 @@ spec:
     targetRevision: gpu-app-breakout
     helm:
       parameters:
-        - name: rhoaiChannel
-          value: "fast-3.x"
         - name: "global.installPlanApproval"
           value: {{ .Values.global.installPlanApproval | default "Manual" | quote }}
   project: default
