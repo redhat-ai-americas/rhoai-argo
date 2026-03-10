@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+spec:
+  # Injects the Lua script into the ConfigMap
+  resourceCustomizations: |
+    operators.coreos.com/Subscription:
+      health.lua: |
+        hs = {}
+        hs.status = "Progressing"
+        hs.message = "Waiting for Operator installation to complete"
+        if obj.status ~= nil then
+          if obj.status.installedCSV ~= nil then
+            hs.status = "Healthy"
+            hs.message = "Operator is installed"
+            return hs
+          end
+          if obj.status.state == "AtLatestKnown" then
+            hs.status = "Healthy"
+            hs.message = "Operator is at latest known state"
+            return hs
+          end
+        end
+        return hs
+---
+apiVersion: console.operator.openshift.io/v1
+kind: Console
+metadata:
+  name: cluster
+spec:
+  # 2. Enable the GitOps UI tab in the OpenShift Console
+  plugins:
+    - gitops-plugin
