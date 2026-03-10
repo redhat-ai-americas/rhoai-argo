@@ -18,16 +18,15 @@ cd rhoai-argo
 - Check if the OpenShift GitOps Subscription exists. If not, apply it and configure permissions for the Service Account once the operator is ready.
 
 ```bash
-# Apply Subscription if missing
-oc get subscription openshift-gitops-operator -n openshift-operators || oc apply -f gitops-config/openshift-gitops-subscription.yaml
+# 1. Install Operator if missing & apply Permission
+oc get subscription openshift-gitops-operator -n openshift-operators &>/dev/null || oc apply -f gitops-config/openshift-gitops-subscription.yamloc apply -f gitops-config/gitops-permission.yaml
 
-# Configure cluster permissions
-oc apply -f gitops-config/gitops-permission.yaml
+# 2. Wait for API and Service to be ready
+until oc get crd argocds.argoproj.io &>/dev/null; do sleep 5; done
+oc wait --for=condition=Available deployment/openshift-gitops-server -n openshift-gitops --timeout=300s
 
-# Wait for the CSV to appear (The "Gap Filler")
-until oc get csv -n openshift-operators -l olm.owner=openshift-gitops-operator 2>/dev/null | grep -q "openshift-gitops"; do sleep 10; done
-
-# Enable Console Sidebar tab
+# 3. Enable the Console Plugin
+until oc get consoleplugin gitops-plugin &>/dev/null; do sleep 5; done
 oc patch console.operator cluster --type=merge -p '{"spec":{"plugins":["gitops-plugin"]}}'
 ```
 

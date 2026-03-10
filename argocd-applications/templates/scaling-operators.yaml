@@ -3,10 +3,12 @@ kind: Application
 metadata:
   name: workload-scaling-operators
   namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
     name: in-cluster
-    namespace: default
+    namespace: openshift-gitops
   source:
     path: helm/workload-scaling
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
@@ -14,12 +16,12 @@ spec:
     helm:
       parameters:
         - name: "global.installPlanApproval"
-          value: {{ .Values.global.installPlanApproval | default "Manual" | quote }}
+          value: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" | quote }}
   project: default
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false
+      selfHeal: false 
     retry:
       limit: 10
       backoff:
