@@ -1,10 +1,10 @@
-apiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1
 kind: ArgoCD
 metadata:
   name: openshift-gitops
   namespace: openshift-gitops
 spec:
-  # Injects the Lua script into the ConfigMap
+  # 1. The custom health check for OpenShift Operators
   resourceCustomizations: |
     operators.coreos.com/Subscription:
       health.lua: |
@@ -25,7 +25,7 @@ spec:
         end
         return hs
 ---
-apiVersion: console.operator.openshift.io/v1
+apiVersion: operator.openshift.io/v1
 kind: Console
 metadata:
   name: cluster
