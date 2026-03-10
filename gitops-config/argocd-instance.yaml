@@ -1,13 +1,13 @@
-apiVersion: v1beta1
+apiVersion: argoproj.io/v1beta1
 kind: ArgoCD
 metadata:
   name: openshift-gitops
   namespace: openshift-gitops
 spec:
-  # 1. The custom health check for OpenShift Operators
-  resourceCustomizations: |
-    operators.coreos.com/Subscription:
-      health.lua: |
+  resourceHealthChecks:
+    - group: operators.coreos.com
+      kind: Subscription
+      check: |
         hs = {}
         hs.status = "Progressing"
         hs.message = "Waiting for Operator installation to complete"
@@ -30,6 +30,5 @@ kind: Console
 metadata:
   name: cluster
 spec:
-  # 2. Enable the GitOps UI tab in the OpenShift Console
   plugins:
     - gitops-plugin

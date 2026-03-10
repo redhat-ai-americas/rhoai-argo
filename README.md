@@ -28,7 +28,7 @@ echo "⏳ Finalizing OpenShift GitOps environment..."
 until oc wait deployment/openshift-gitops-server -n openshift-gitops --for=condition=Available --timeout=10s &>/dev/null; do sleep 5; done
 
 # 3. Apply custom health checks and enable the sidebar GitOps tab
-oc apply -f gitops-config/argocd-instance.yaml
+oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 ```
 
 ---
