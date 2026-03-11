@@ -13,8 +13,8 @@ spec:
         hs.status = "Progressing"
         hs.message = "Waiting for child app to stabilize..."
 
-        if obj.status ~= nil and obj.status.health ~= nil then
-          if obj.status.health.status == "Healthy" then
+        if obj.status ~= nil and obj.status.health ~= nil and obj.status.sync ~= nil then
+          if obj.status.health.status == "Healthy" and obj.status.sync.status == "Synced" then
             hs.status = "Healthy"
             hs.message = "Child app is fully Healthy"
           else
@@ -27,7 +27,7 @@ spec:
       kind: Subscription
       check: |
         hs = {}
-        if obj.status ~= nil and obj.status.installedCSV ~= nil then
+        if obj.status ~= nil and obj.status.state == "AtLatestKnown" then
           hs.status = "Healthy"
           hs.message = "Operator installed"
         else
