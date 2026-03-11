@@ -14,7 +14,7 @@ metadata:
   name: openshift-custom-metrics-autoscaler-operator
   namespace: openshift-keda
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "2"
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription

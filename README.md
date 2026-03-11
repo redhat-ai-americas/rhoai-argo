@@ -123,7 +123,7 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 | 0 | Namespaces | All operators |
 | 5 | RHOAI Dependencies | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability |
 | 7 | Configs | cluster-job-set, cma-controller|
-| 10 | GPU Dependencies| nfd-operator |
+| 10 | GPU Dependencies & Hardware Operators| nfd-operator, kmm |
 | 15 | Configs | nfd-instance |
 | 20 | NVIDIA GPU Operator| gpu-operator |
 | 25 | GPU Cluster Policy | gpu-clusterpolicy |
@@ -194,7 +194,7 @@ rhoai-argo/
     │       ├── configs/
     │       │   └── 15-nfd-instance.yaml
     │       └── operators/
-    │           ├── 05-kmm.yaml
+    │           ├── 10-kmm.yaml
     │           └── 10-nfd-operator.yaml
     ├── network-fabric/
     │   ├── Chart.yaml
