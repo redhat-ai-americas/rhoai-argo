@@ -121,9 +121,9 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 | Sync Wave | Summary | Resources |
 |-----------|-----------|-------------|
 | 0 | Namespaces | All operators |
-| 5 | RHOAI Dependencies | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability |
+| 5 | RHOAI Dependencies & Utilities | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability, kmm  |
 | 7 | Configs | cluster-job-set, cma-controller|
-| 10 | GPU Dependencies & Hardware Operators| nfd-operator, kmm |
+| 10 | GPU Dependencies & Hardware Operators| nfd-operator|
 | 15 | Configs | nfd-instance |
 | 20 | NVIDIA GPU Operator| gpu-operator |
 | 25 | GPU Cluster Policy | gpu-clusterpolicy |
@@ -151,7 +151,6 @@ rhoai-argo/
 │   ├── Chart.yaml
 │   └── templates/
 │       ├── gpu-installation.yaml
-│       ├── hardware-operators.yaml
 │       ├── network-operators.yaml
 │       ├── observability-operators.yaml
 │       ├── rhoai-application.yaml
@@ -184,23 +183,17 @@ rhoai-argo/
     │   ├── values.yaml
     │   └── templates/
     │       ├── configs/
+    │       │   ├── 15-nfd-instance.yaml
     │       │   └── 25-gpu-clusterpolicy.yaml
     │       └── operators/
+    │           ├── 10-nfd-operator.yaml
     │           └── 20-gpu-operator.yaml
-    ├── hardware-management/
-    │   ├── Chart.yaml
-    │   ├── values.yaml
-    │   └── templates/
-    │       ├── configs/
-    │       │   └── 15-nfd-instance.yaml
-    │       └── operators/
-    │           ├── 10-kmm.yaml
-    │           └── 10-nfd-operator.yaml
     ├── network-fabric/
     │   ├── Chart.yaml
     │   └── templates/
     │       ├── configs/
     │       └── operators/
+    │           ├── 05-kmm.yaml
     │           ├── 05-rhcl.yaml
     │           └── 05-sriov.yaml
     └── observability-stack/

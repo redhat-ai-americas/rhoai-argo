@@ -1,3 +1,3 @@
 nvidiaGpuChannel: "v25.3"
-nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
+nvidiaGpuVersion: 'gpu-operator-certified.v25.3.4'
 nvidiaGpuDriverVersion: 575.57.08
