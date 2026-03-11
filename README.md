@@ -150,8 +150,8 @@ rhoai-argo/
 ├── argocd-applications/
 │   ├── Chart.yaml
 │   └── templates/
-│       ├── gpu-installation.yaml
-│       ├── network-operators.yaml
+│       ├── gpu-operator.yaml
+│       ├── infrastrcuture-operators.yaml
 │       ├── observability-operators.yaml
 │       ├── rhoai-application.yaml
 │       └── scaling-operators.yaml
@@ -178,7 +178,7 @@ rhoai-argo/
     │           ├── 05-job-set.yaml
     │           ├── 05-leader-worker-set.yaml
     │           └── 05-rhbok.yaml
-    ├── gpu-installation/
+    ├── gpu-operator-installation/
     │   ├── Chart.yaml
     │   ├── values.yaml
     │   └── templates/
@@ -188,7 +188,7 @@ rhoai-argo/
     │       └── operators/
     │           ├── 10-nfd-operator.yaml
     │           └── 20-gpu-operator.yaml
-    ├── network-fabric/
+    ├── infrastructure-utilities/
     │   ├── Chart.yaml
     │   └── templates/
     │       ├── configs/

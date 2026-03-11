@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: network-fabric
+  name: gpu-operator-installation
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   destination:
     name: in-cluster
     namespace: openshift-gitops
   source:
-    path: helm/network-fabric
+    path: helm/gpu-operator-installation
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: gpu-app-breakout
     helm:
