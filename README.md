@@ -43,8 +43,9 @@ oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 oc apply -f app-of-apps.yaml
 ```
 
-### Option B: Automatic Update Installation
-- This allows the cluster to automatically handle future patches for dependencies (Hardware, Network, etc.). **Note:** RHOAI itself will remain on Manual approval.
+### Option B: Allow Automatic Operator Updates
+- This allows the cluster to automatically handle future patches for dependency operators. 
+- **Note:** RHOAI itself will remain on Manual approval.
 
 ```bash
 sed 's/installPlanApproval: Manual/installPlanApproval: Automatic/' app-of-apps.yaml | oc apply -f -
@@ -123,13 +124,19 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 | 0 | Namespaces | All operators |
 | 5 | RHOAI Dependencies & Utilities | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability, kmm  |
 | 7 | Configs | cluster-job-set, cma-controller|
+||
+| *Checkpoint* | 
+||
 | 10 | GPU Dependencies & Hardware Operators| nfd-operator|
 | 15 | Configs | nfd-instance |
 | 20 | NVIDIA GPU Operator| gpu-operator |
 | 25 | GPU Cluster Policy | gpu-clusterpolicy |
+||
+| *Checkpoint* | 
+||
 | 30 | RHOAI Operator Group + Subscription | rhoai-operator |
 | 32 | RHOAI Deployment | operator-deployment |
-| 33 | DataScienceCluster resource configuration for RHOAI | datasciencecluster |
+| 33 | DataScienceCluster configuration | datasciencecluster |
 | 35 | RHOAI dashboard configuration | odhdashboardconfig |
 
 ---
