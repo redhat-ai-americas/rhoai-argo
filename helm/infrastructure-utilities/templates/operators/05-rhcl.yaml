@@ -12,9 +12,7 @@ metadata:
   namespace: openshift-connectivity-link
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-spec:
-  targetNamespaces:
-  - openshift-connectivity-link
+spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
