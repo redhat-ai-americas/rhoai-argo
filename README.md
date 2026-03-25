@@ -10,7 +10,7 @@ To initialize RHOAI, install OpenShift GitOps, configure permissions, and trigge
 
 ### 0. Clone the Repository
 ```bash
-git clone https://github.com/redhat-ai-americas/rhoai-argo.git
+git clone -b gpu-app-breakout https://github.com/redhat-ai-americas/rhoai-argo.git
 cd rhoai-argo
 ```
 
