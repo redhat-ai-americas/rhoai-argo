@@ -23,6 +23,7 @@ configuration:
     installPlanApproval: *installPlanApproval
 
   RhoaiApp:
+    installPlanApproval: *installPlanApproval
     rhoaiChannel: "stable-3.x"
     rhoaiVersion: "rhods-operator.3.3.0"
 
