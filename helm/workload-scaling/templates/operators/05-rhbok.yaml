@@ -27,7 +27,7 @@ metadata:
   namespace: openshift-kueue-operator
 spec:
   channel: stable-v1.2
-  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
   name: kueue-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace

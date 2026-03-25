@@ -1,8 +1,7 @@
+installPlanApproval: Manual
+
 rhoaiChannel: "stable-3.3"
 rhoaiVersion: "rhods-operator.3.3.0"
-nvidiaGpuChannel: "v25.3"
-nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
-nvidiaGpuDriverVersion: 575.57.08
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 
@@ -59,9 +58,6 @@ dashboardConfig:
 
 defaultWorkbenchPvcSize: 20Gi
 showJupyterInEnabledApplications: true
-notebookIdleCulling:
-  enabled: true
-  timeoutInMinutes: 240
 
 modelServerSizes:
   - name: Small

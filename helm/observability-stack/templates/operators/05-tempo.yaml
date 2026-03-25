@@ -28,4 +28,4 @@ spec:
   name: tempo-product
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}

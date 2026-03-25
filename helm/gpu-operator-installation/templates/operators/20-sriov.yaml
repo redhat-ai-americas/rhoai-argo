@@ -25,10 +25,10 @@ metadata:
   name: sriov-network-operator
   namespace: openshift-sriov-network-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "20"
 spec:
   channel: stable
   name: sriov-network-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}

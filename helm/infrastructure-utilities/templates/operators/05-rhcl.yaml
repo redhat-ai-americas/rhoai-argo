@@ -23,7 +23,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "5"
 spec:
   channel: stable
-  installPlanApproval: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" }}
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
   name: rhcl-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
