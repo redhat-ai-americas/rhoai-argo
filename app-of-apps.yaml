@@ -12,6 +12,11 @@ spec:
     helm:
       valuesObject:
         installPlanApproval: Manual
+        configuration:
+          gpuApp:
+            nvidiaGpuChannel: "v25.10"
+            nvidiaGpuVersion: 'gpu-operator-certified.v25.10.1'
+            nvidiaGpuDriverVersion: 580.126.20
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops
