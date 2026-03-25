@@ -47,6 +47,7 @@ configuration:
         trustyai:
           managementState: Managed
         aipipelines:
+          managementState: Managed
           argoWorkflowsControllers:
             managementState: Managed
         ray:
