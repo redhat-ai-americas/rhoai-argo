@@ -1,6 +1,6 @@
 apiVersion: v2
 name: rhoai-gitops
-description: GitOps for installing Red Hat OpenShift AI.
+description: GitOps for installing Red Hat OpenShift AI and some dependencies.
 
 type: application
 

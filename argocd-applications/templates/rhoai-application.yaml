@@ -1,0 +1,39 @@
+{{- if .Values.enableRhoaiApp }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rhoai-deployment
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+spec:
+  destination:
+    name: in-cluster
+    namespace: openshift-gitops
+  source:
+    path: helm/rhoai-stack
+    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+    targetRevision: gpu-app-breakout
+    helm:
+      valuesObject:
+        {{- .Values.configuration.RhoaiApp | toYaml | nindent 8 }}
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false 
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops
+{{- end }}

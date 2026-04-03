@@ -1,0 +1,39 @@
+{{- if .Values.enableObservabilityApp }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: observability-operators
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  destination:
+    name: in-cluster
+    namespace: openshift-gitops
+  source:
+    path: helm/observability-stack
+    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+    targetRevision: gpu-app-breakout
+    helm:
+      valuesObject:
+        {{- .Values.configuration.ObservabilityApp | toYaml | nindent 8 }}
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false 
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops
+{{- end }}

@@ -1,0 +1,36 @@
+{{- if .Values.enableRdma }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  labels:
+    name: nvidia-network-operator
+    openshift.io/cluster-monitoring: "true"
+  name: nvidia-network-operator
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: nvidia-network-operator-group
+  namespace: nvidia-network-operator
+spec:
+  targetNamespaces:
+  - nvidia-network-operator
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+  name: nvidia-network-operator
+  namespace: nvidia-network-operator
+spec:
+  channel: stable
+  installPlanApproval: Manual
+  name: nvidia-network-operator
+  source: certified-operators
+  sourceNamespace: openshift-marketplace
+{{- end }}

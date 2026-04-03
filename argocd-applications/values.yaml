@@ -1,0 +1,87 @@
+installPlanApproval: &installPlanApproval Manual
+kueue: &kueue "Unmanaged"
+trainer: &trainer "Managed"
+
+enableGpuApp: true
+enableInfrastructureApp: true
+enableObservabilityApp: true
+enableRhoaiApp: true
+enableWorkloadScalingApp: true
+
+configuration:
+  gpuApp:
+    installPlanApproval: *installPlanApproval
+    enableRdma: false
+    nvidiaGpuChannel: "v25.3"
+    nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
+    nvidiaGpuDriverVersion: 575.57.08
+
+  infrastructureApp:
+    installPlanApproval: *installPlanApproval
+
+  ObservabilityApp:
+    installPlanApproval: *installPlanApproval
+
+  RhoaiApp:
+    installPlanApproval: *installPlanApproval
+    rhoaiChannel: "stable-3.x"
+    rhoaiVersion: "rhods-operator.3.3.0"
+
+    operatorReplicas: 1
+    dashboardReplicas: 1
+
+    dataScienceCluster:
+      create: true
+
+      components:
+        kserve:
+          managementState: Managed
+          nim:
+            managementState: Managed
+          rawDeploymentServiceConfig: Headed
+        modelregistry:
+          managementState: Managed
+          registriesNamespace: rhoai-model-registries
+        feastoperator:
+          managementState: Managed
+        trustyai:
+          managementState: Managed
+        aipipelines:
+          managementState: Managed
+          argoWorkflowsControllers:
+            managementState: Managed
+        ray:
+          managementState: Managed
+        kueue:
+          defaultClusterQueueName: default
+          defaultLocalQueueName: default
+          managementState: *kueue
+        workbenches:
+          managementState: Managed
+          workbenchNamespace: rhods-notebooks
+        dashboard:
+          managementState: Managed
+        mlflowoperator:
+          managementState: Managed
+        trainer:
+          managementState: *trainer
+        trainingoperator:
+          managementState: Removed
+        llamastackoperator:
+          managementState: Managed
+
+    userGroups:
+      - system:authenticated
+
+    dashboardConfig:
+      genAiStudio: true
+      modelAsService: true
+      mlflow: true
+
+    defaultWorkbenchPvcSize: 20Gi
+    showJupyterInEnabledApplications: true
+
+  WorkloadScalingApp:
+    installPlanApproval: *installPlanApproval
+    kueue: *kueue
+    trainer: *trainer

@@ -1,31 +1,31 @@
-{{- if eq .Values.advancedServing "Managed" }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: openshift-serverless
+  name: openshift-nfd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: serverless-operators
-  namespace: openshift-serverless
+  name: openshift-nfd-group
+  namespace: openshift-nfd
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
-spec: {}
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  targetNamespaces:
+  - openshift-nfd
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: serverless-operator
-  namespace: openshift-serverless
+  name: nfd
+  namespace: openshift-nfd
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   channel: "stable"
-  installPlanApproval: Automatic
-  name: serverless-operator
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+  name: nfd
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-{{- end }}

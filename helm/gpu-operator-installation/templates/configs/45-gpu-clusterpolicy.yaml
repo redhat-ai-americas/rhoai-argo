@@ -4,7 +4,7 @@ metadata:
   name: gpu-cluster-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: "25"
+    argocd.argoproj.io/sync-wave: "45"
 spec:
   vgpuDeviceManager:
     config:
@@ -39,6 +39,9 @@ spec:
       nlsEnabled: true
     enabled: true
     kernelModuleType: proprietary
+    repository: nvcr.io/nvidia
+    image: driver
+    version: {{ .Values.nvidiaGpuDriverVersion }}
     useOpenKernelModules : false
     certConfig:
       name: ''

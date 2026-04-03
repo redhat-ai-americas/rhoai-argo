@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+spec:
+  resourceHealthChecks:
+    # This makes the Parent wait for the Child's status
+    - group: argoproj.io
+      kind: Application
+      check: |
+        hs = {}
+        hs.status = "Progressing"
+        hs.message = "Waiting for child app to stabilize..."
+
+        if obj.status ~= nil and obj.status.health ~= nil and obj.status.sync ~= nil then
+          if obj.status.health.status == "Healthy" and obj.status.sync.status == "Synced" then
+            hs.status = "Healthy"
+            hs.message = "Child app is fully Healthy"
+          else
+            hs.status = obj.status.health.status
+            hs.message = obj.status.health.message or ""
+          end
+        end
+        return hs
+    - group: operators.coreos.com
+      kind: Subscription
+      check: |
+        hs = {}
+        if obj.status ~= nil and obj.status.state == "AtLatestKnown" then
+          hs.status = "Healthy"
+          hs.message = "Operator installed"
+        else
+          hs.status = "Progressing"
+          hs.message = "Waiting for CSV"
+        end
+        return hs
+---
+apiVersion: operator.openshift.io/v1
+kind: Console
+metadata:
+  name: cluster
+spec:
+  plugins:
+    - gitops-plugin

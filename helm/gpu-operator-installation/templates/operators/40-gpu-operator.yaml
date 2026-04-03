@@ -11,7 +11,7 @@ metadata:
   name: nvidia-gpu-operator-group
   namespace: nvidia-gpu-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   targetNamespaces:
   - nvidia-gpu-operator
@@ -22,10 +22,13 @@ metadata:
   name: gpu-operator-certified
   namespace: nvidia-gpu-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-wave: "40"
 spec:
-  channel: "stable"
-  installPlanApproval: Automatic
+  channel: {{ .Values.nvidiaGpuChannel }}
+  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+  {{- if .Values.nvidiaGpuVersion }}
+  startingCSV: {{ .Values.nvidiaGpuVersion }}
+  {{- end }}
   name: gpu-operator-certified
   source: certified-operators
   sourceNamespace: openshift-marketplace

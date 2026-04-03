@@ -1,0 +1,13 @@
+{{- if not (eq .Values.trainer "Removed") }}
+apiVersion: operator.openshift.io/v1
+kind: JobSetOperator
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "7"
+spec:
+  logLevel: Normal
+  managementState: Managed
+  operatorLogLevel: Normal
+{{- end }}

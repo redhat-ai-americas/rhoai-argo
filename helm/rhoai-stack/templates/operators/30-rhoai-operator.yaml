@@ -22,8 +22,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "30"
 spec:
-  channel: {{ .Values.channel }}
-  installPlanApproval: Automatic
+  channel: {{ .Values.rhoaiChannel }}
+  installPlanApproval: Manual
+  {{- if .Values.rhoaiVersion }}
+  startingCSV: {{ .Values.rhoaiVersion }}
+  {{- end }}
   name: rhods-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace

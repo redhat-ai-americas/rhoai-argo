@@ -1,0 +1,39 @@
+{{- if .Values.enableGpuApp }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gpu-operator-installation
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  destination:
+    name: in-cluster
+    namespace: openshift-gitops
+  source:
+    path: helm/gpu-operator-installation
+    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+    targetRevision: gpu-app-breakout
+    helm:
+      valuesObject:
+        {{- .Values.configuration.gpuApp | toYaml | nindent 8 }}
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false 
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops
+{{- end }}
