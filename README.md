@@ -10,7 +10,7 @@ To initialize RHOAI, install OpenShift GitOps, configure permissions, and trigge
 
 ### 0. Clone the Repository
 ```bash
-git clone -b gpu-app-breakout https://github.com/redhat-ai-americas/rhoai-argo.git
+git clone https://github.com/redhat-ai-americas/rhoai-argo.git
 cd rhoai-argo
 ```
 
@@ -93,7 +93,7 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 
 1. **GPU MachineSet:** Create a GPU worker MachineSet for your cloud provider. See [Enable GPU Support Docs](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/02-enable-gpu-support.md).
 2. **Hardware Profile:** Create a Hardware Profile in the RHOAI dashboard:
-   - **Settings > Hardware profiles > Create hardware profile**
+   - **Settings > Environment Setup > Hardware profiles > Create hardware profile**
    - Add resource: `nvidia.com/gpu` (Default: 1, Min: 1, Max: 1)
    - Add toleration: Operator: `Exists`, Effect: `NoSchedule`, Key: `nvidia.com/gpu`
    - Ref: [RHOAI 3.2 Hardware Profiles](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html/working_with_accelerators/working-with-hardware-profiles_accelerators).
