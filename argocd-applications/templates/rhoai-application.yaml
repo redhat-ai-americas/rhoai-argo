@@ -1,4 +1,3 @@
-{{- if .Values.enableRhoaiApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -13,10 +12,11 @@ spec:
   source:
     path: helm/rhoai-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: gpu-app-breakout
+    targetRevision: main
     helm:
-      valuesObject:
-        {{- .Values.configuration.RhoaiApp | toYaml | nindent 8 }}
+      parameters:
+        - name: "global.installPlanApproval"
+          value: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" | quote }}
   project: default
   syncPolicy:
     automated:
@@ -36,4 +36,3 @@ spec:
     managedNamespaceMetadata:
       labels:
         argocd.argoproj.io/managed-by: openshift-gitops
-{{- end }}
