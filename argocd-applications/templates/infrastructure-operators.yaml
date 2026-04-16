@@ -1,3 +1,4 @@
+{{- if .Values.enableInfrastructureApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -14,9 +15,8 @@ spec:
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: main
     helm:
-      parameters:
-        - name: "global.installPlanApproval"
-          value: {{ ((.Values.global) | default dict).installPlanApproval | default "Manual" | quote }}
+      valuesObject:
+        {{- .Values.configuration.infrastructureApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:
@@ -36,3 +36,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         argocd.argoproj.io/managed-by: openshift-gitops
+{{- end }}

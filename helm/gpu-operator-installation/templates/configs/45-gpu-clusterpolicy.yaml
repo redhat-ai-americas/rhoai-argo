@@ -34,6 +34,11 @@ spec:
     default: false
     enabled: false
   driver:
+{{- if .Values.enableRdma }}
+    rdma:
+      enabled: true
+      useHostMofed: false
+{{- end }}
     licensingConfig:
       configMapName: ''
       nlsEnabled: true

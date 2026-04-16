@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     path: argocd-applications
-    targetRevision: gpu-app-breakout
+    targetRevision: main
     helm:
       valuesObject:
         installPlanApproval: Manual
