@@ -44,11 +44,12 @@ oc apply -f app-of-apps.yaml
 ```
 
 ### Option B: Allow Automatic Operator Updates
-- This allows the cluster to automatically handle future patches for dependency operators. 
+- This command changes the value inside **argocd-applications/values.yaml**, such that operators with automatically install **and automatically update**
+- You can also manually change line 1 of the values.yaml from ... Manual to ... Automatic
 - **Note:** RHOAI itself will remain on Manual approval.
 
 ```bash
-sed 's/&installPlanApproval Manual/&installPlanApproval Automatic/' argocd-applications/values.yaml | helm template argocd-applications/ -f - | oc apply -f -
+sed -i 's/&installPlanApproval Manual/\&installPlanApproval Automatic/' argocd-applications/values.yaml
 ```
 
 ---
