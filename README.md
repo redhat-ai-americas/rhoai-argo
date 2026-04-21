@@ -48,7 +48,7 @@ oc apply -f app-of-apps.yaml
 - **Note:** RHOAI itself will remain on Manual approval.
 
 ```bash
-sed 's/&installPlanApproval Manual/&installPlanApproval Automatic/' values.yaml | helm template . -f - | oc apply -f -
+sed 's/&installPlanApproval Manual/&installPlanApproval Automatic/' argocd-applications/values.yaml | helm template argocd-applications/ -f - | oc apply -f -
 ```
 
 ---
