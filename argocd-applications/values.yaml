@@ -25,7 +25,7 @@ configuration:
   RhoaiApp:
     installPlanApproval: Manual
     rhoaiChannel: "stable-3.x"
-    rhoaiVersion: "rhods-operator.3.3.0"
+    rhoaiVersion: "rhods-operator.3.3.2"
 
     operatorReplicas: 1
     dashboardReplicas: 1
