@@ -2,6 +2,28 @@
 
 Deployment of **Red Hat OpenShift AI (RHOAI)** and its required infrastructure stack using Helm and ArgoCD.
 
+## Automation Architecture
+
+| Sync Wave | Description | Resources |
+|-----------|-----------|-------------|
+| 0 | Namespaces | All operators |
+| 5 | RHOAI Dependencies & Utilities | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability, kmm  |
+| 7 | Configs | cluster-job-set, cma-controller|
+||
+| *Checkpoint* | 
+||
+| 10 | GPU Dependencies & Hardware Operators| nfd-operator|
+| 15 | Configs | nfd-instance |
+| 20 | NVIDIA GPU Operator| gpu-operator |
+| 25 | GPU Cluster Policy | gpu-clusterpolicy |
+||
+| *Checkpoint* | 
+||
+| 30 | RHOAI Operator Group + Subscription | rhoai-operator |
+| 32 | RHOAI Deployment | operator-deployment |
+| 33 | DataScienceCluster configuration | datasciencecluster |
+| 35 | RHOAI dashboard configuration | odhdashboardconfig |
+
 ---
 
 ## 🚀 Getting Started
@@ -14,8 +36,8 @@ git clone https://github.com/redhat-ai-americas/rhoai-argo.git
 cd rhoai-argo
 ```
 
-### 1. Prepare OpenShift GitOps
-- Check if the OpenShift GitOps Subscription exists. If not, apply it and configure permissions for the Service Account once the operator is ready.
+### 1. Prepare OpenShift GitOps (~60 seconds)
+- Checks if the OpenShift GitOps Subscription exists. If not, applies it and configures permissions for the Service Account once the operator is **fully** ready.
 
 ```bash
 # 1. Install Operator (only if missing) & Permissions
@@ -35,26 +57,45 @@ oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 
 ## 📦 2. Trigger "App-of-Apps" Deployment
 
-- Choose one of the following installation strategies. Both use the **App-of-Apps** pattern with sync waves, which you can find the details of down below.
+- Apply the yaml file for our **App-of-Apps** pattern controlled via sync waves.
 
-### Option A: Default Installation (Manual Approval)
+### Installation (Manual Approval)
 - Operators will require manual approval for any version upgrades in the OpenShift Console.
 ```bash
 oc apply -f app-of-apps.yaml
 ```
 
-### Option B: Allow Automatic Operator Updates
-- This command changes the value inside **argocd-applications/values.yaml**, such that operators with automatically install **and automatically update**
-- You can also manually change line 1 of the values.yaml from ... Manual to ... Automatic
-- **Note:** RHOAI itself will remain on Manual approval.
+---
 
-```bash
-sed -i 's/&installPlanApproval Manual/\&installPlanApproval Automatic/' argocd-applications/values.yaml
-```
+### Approve InstallPlans
+> [!NOTE]
+> You must approve the InstallPlan requests as they attempt to install. This is to avoid automatic updates on your AI workloads. If you would like to change the values.yaml file for a group of operators, you can push this to an empty repository. Then, change the app files to your git repo, and change the values.yaml to Automatic updates.
+
+1. In the OpenShift Dashboard, navigate to **Home > Search**.
+2. Type **"InstallPlan"** in the search bar and select the resource type.
+3. Click on the InstallPlan name in the first column, **Installxxxxx > Preview InstallPlan > Approve**. (Or use the tip below)
+4. To get back to the list, click on **InstallPlans** in the path at the top left. **Make sure** you are on **all projects** from the namespace dropdown menu at the top of the screen to see all InstallPlans.
+
+> [!TIP]
+> **Bulk Approval:** To approve all currently waiting InstallPlans at once, run:
+> ```bash
+> oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
+> ```
+>
+> **Rolling Approval:** To approve all pending and future InstallPlans, run:
+> ```bash
+> oc get installplan -A -w --no-headers | while read -r namespace name csv approval approved rest; do
+>    if [ "$approved" = "false" ]; then
+>        echo "Detected pending InstallPlan: $name in $namespace. Approving..."
+>        oc patch installplan "$name" -n "$namespace" --type merge -p '{"spec":{"approved":true}}'
+>    fi
+>done
+> ```
+
 
 ---
 
-## 🖥️ 3. Monitor and Approve Installation
+## 🖥️ 3. Monitor ArgoCD
 
 - The ArgoCD dashboard is available via the **Waffle Menu** in the OpenShift Console header. Alternatively, retrieve the URL directly:
 
@@ -63,26 +104,7 @@ sed -i 's/&installPlanApproval Manual/\&installPlanApproval Automatic/' argocd-a
 oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}'
 ```
 
-### Approve InstallPlans
-> [!NOTE]
-> You must approve the RHOAI InstallPlan once it requests approval. If you chose **Option A**, you must also approve all infrastructure dependencies.
 
-
-1. In the OpenShift Dashboard, navigate to **Home > Search**.
-2. Type **"InstallPlan"** in the search bar and select the resource type.
-3. Initiate operator installations by clicking **Installxxxxx > Preview InstallPlan > Approve**.
-
----
-
-> [!NOTE]
-> The Service Mesh Operator, automatically installed by RHOAI, is not the most current version. The update/InstallPlan to the latest version can be ignored.
-
-
-> [!TIP]
-> **Bulk Approval:** To approve all currently waiting InstallPlans at once (the additional Servish Mesh version does not break anything), run:
-> ```bash
-> oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
-> ```
 
 **Wait for the `rhoai-deployment` ArgoCD application to reach a Healthy state, and... Enjoy using RHOAI!**
 
@@ -118,33 +140,12 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 | **[Tempo](https://catalog.redhat.com/en/software/container-stacks/detail/64254fc5060863e2125a6186)** | High-scale distributed tracing backend |
 | **[Cluster Observability](https://docs.redhat.com/en/documentation/red_hat_openshift_cluster_observability_operator/1-latest)** | Standalone monitoring stacks for independent service configuration |
 
-## Sync Wave Architecture
-
-| Sync Wave | Summary | Resources |
-|-----------|-----------|-------------|
-| 0 | Namespaces | All operators |
-| 5 | RHOAI Dependencies & Utilities | job-set-operator, cma-operator, cert-manager, leader-worker-set, Kueue, SR-IOV, OpenTelemetry, Tempo, ClusterObservability, kmm  |
-| 7 | Configs | cluster-job-set, cma-controller|
-||
-| *Checkpoint* | 
-||
-| 10 | GPU Dependencies & Hardware Operators| nfd-operator|
-| 15 | Configs | nfd-instance |
-| 20 | NVIDIA GPU Operator| gpu-operator |
-| 25 | GPU Cluster Policy | gpu-clusterpolicy |
-||
-| *Checkpoint* | 
-||
-| 30 | RHOAI Operator Group + Subscription | rhoai-operator |
-| 32 | RHOAI Deployment | operator-deployment |
-| 33 | DataScienceCluster configuration | datasciencecluster |
-| 35 | RHOAI dashboard configuration | odhdashboardconfig |
-
 ---
 
 ## References
 
 * [Upstream OpenShift AI Setup Reference](https://github.com/jharmison-redhat/openshift-setup/tree/main/charts/openshift-ai/templates)
+* [RHOAI Installation Documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html/installing_and_uninstalling_openshift_ai_self-managed/installing-and-deploying-openshift-ai_install#requirements-for-openshift-ai-self-managed_install)
 
 ## Repository Structure
 
