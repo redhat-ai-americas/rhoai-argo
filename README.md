@@ -69,10 +69,10 @@ oc apply -f app-of-apps.yaml
 
 ### Approve InstallPlans
 > [!NOTE]
-> You must approve the InstallPlan requests as they attempt to install. This is to avoid automatic updates on your AI workloads. If you would like to change the values.yaml file for a group of operators, you can push this to an empty repository. Then, change the app files to your git repo, and change the values.yaml to Automatic updates.
+> You must approve the InstallPlan requests as they attempt to install. This is to avoid automatic updates on your AI workloads. In order to use Automatic updates, first push this to an empty repository and update the app templates to point to git url. Then, change the end of the first line in *argocd-applications/values.yaml* from **Manual** to **Automatic**
 
 1. In the OpenShift Dashboard, navigate to **Home > Search**.
-2. Type **"InstallPlan"** in the search bar and select the resource type.
+2. The search bar, where it says *Resources*, type **"InstallPlan"** select the resource type.
 3. Click on the InstallPlan name in the first column, **Installxxxxx > Preview InstallPlan > Approve**. (Or use the tip below)
 4. To get back to the list, click on **InstallPlans** in the path at the top left. **Make sure** you are on **all projects** from the namespace dropdown menu at the top of the screen to see all InstallPlans.
 
@@ -84,12 +84,12 @@ oc apply -f app-of-apps.yaml
 >
 > **Rolling Approval:** To approve all pending and future InstallPlans, run:
 > ```bash
-> oc get installplan -A -w --no-headers | while read -r namespace name csv approval approved rest; do
->    if [ "$approved" = "false" ]; then
->        echo "Detected pending InstallPlan: $name in $namespace. Approving..."
->        oc patch installplan "$name" -n "$namespace" --type merge -p '{"spec":{"approved":true}}'
->    fi
->done
+> oc get installplan -A -w -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase --no-headers | while read -r namespace name phase; do
+>      if [ "$phase" = "RequiresApproval" ]; then
+>       echo "Detected ready InstallPlan: $name in $namespace. Approving..."
+>       oc patch installplan "$name" -n "$namespace" --type merge -p '{"spec":{"approved":true}}'
+>   fi
+> done
 > ```
 
 
@@ -110,17 +110,15 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 
 ---
 
-## 🛠️ 4. Manual Post-Sync Steps
+## 🛠️ 4. Configure Hardware (Optional)
 
-**Some steps are cluster-specific and cannot be fully automated via GitOps:**
+If your workloads require GPU acceleration, navigate to the `hardware-profile/` directory. This folder contains automation scripts and documentation to streamline your GPU setup rather than relying on manual cluster configurations.
 
-1. **GPU MachineSet:** Create a GPU worker MachineSet for your cloud provider. See [Enable GPU Support Docs](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/02-enable-gpu-support.md).
-2. **Hardware Profile:** Create a Hardware Profile in the RHOAI dashboard:
-   - **Settings > Environment Setup > Hardware profiles > Create hardware profile**
-   - Add resource: `nvidia.com/gpu` (Default: 1, Min: 1, Max: 1)
-   - Add toleration: Operator: `Exists`, Effect: `NoSchedule`, Key: `nvidia.com/gpu`
-   - Ref: [RHOAI 3.2 Hardware Profiles](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html/working_with_accelerators/working-with-hardware-profiles_accelerators).
-3. **GPU Node Taints (Optional):** Prevent non-GPU workloads from scheduling on GPU nodes. See [Configure GPU Sharing](https://github.com/redhat-ai-americas/rhoai-installation-workshop/blob/main/docs/05-configure-gpu-sharing-method.md).
+Please see the **[Hardware Profile Guide](hardware-profile/README.md)** for step-by-step instructions on how to do any of the following:
+1. **Provision GPU Nodes:** Automatically create a GPU MachineSet with the correct AWS instance types, labels, and taints.
+2. **Install GPU Dashboards:** Deploy the NVIDIA DCGM Exporter dashboard directly to your OpenShift web console.
+3. **Enable Time-Slicing:** Dynamically partition physical GPUs into virtual replicas so multiple workloads can share resources.
+4. **Register the Hardware Profile:** The final RHOAI dashboard steps to make the GPUs selectable for deployments and workbenches.
 
 ---
 
