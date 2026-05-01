@@ -13,7 +13,7 @@ spec:
   source:
     path: helm/rhoai-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: spark
+    targetRevision: main
     helm:
       valuesObject:
         {{- .Values.configuration.RhoaiApp | toYaml | nindent 8 }}
