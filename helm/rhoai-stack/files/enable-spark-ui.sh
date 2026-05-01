@@ -10,7 +10,7 @@ export INGRESS_URL_ARG='--ingress-url-format=https://{{$appName}}-{{$appNamespac
 #yq -i '.spec.template.spec.containers[0].args += "--ingress-tls=[{}]"' /tmp/manager.yaml
 #oc apply -f /tmp/manager.yaml
 
-oc patch deployment spark-operator-controller -n spark-operator --type='json' -p="[
+oc patch deployment spark-operator-controller -n redhat-ods-applications --type='json' -p="[
   {
     \"op\": \"add\",
     \"path\": \"/spec/template/spec/containers/0/args/-\",
