@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: enable-spark-ui
-  namespace: redhat-ods-applications
+  namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "35"
@@ -15,7 +15,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: enable-spark-ui
-  namespace: redhat-ods-applications
+  namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "35"
@@ -35,5 +35,6 @@ spec:
             name: enable-spark-ui
             defaultMode: 0755
       restartPolicy: Never
+      serviceAccountName: openshift-gitops-argocd-application-controller
   backoffLimit: 1
 {{- end }}
