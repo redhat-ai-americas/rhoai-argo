@@ -13,7 +13,7 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: url-getter-job
+  name: enable-spark-ui
   namespace: {{ .Release.Namespace }}
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -31,7 +31,7 @@ spec:
       volumes:
         - name: scripts
           configMap:
-            name: cluster-url-getter
+            name: enable-spark-ui
             defaultMode: 0755
       restartPolicy: Never
   backoffLimit: 1
