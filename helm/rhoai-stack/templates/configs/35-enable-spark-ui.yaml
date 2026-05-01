@@ -2,19 +2,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cluster-url-getter
+  name: enable-spark-ui
+  namespace: redhat-ods-applications
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "35"
 data:
-  create_secret.sh: |-
+  enable-spark-ui.sh: |-
     {{ .Files.Get "files/enable-spark-ui.sh" | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: enable-spark-ui
-  namespace: {{ .Release.Namespace }}
+  namespace: redhat-ods-applications
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "35"
