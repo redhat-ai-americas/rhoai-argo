@@ -1,0 +1,38 @@
+{{- if not (eq .Values.spark "Removed") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-url-getter
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
+data:
+  create_secret.sh: |-
+    {{ .Files.Get "files/enable-spark-ui.sh" | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: url-getter-job
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
+spec:
+  template:
+    spec:
+      containers:
+        - name: installer
+          image: registry.redhat.io/openshift4/ose-cli:latest
+          command: ["/bin/bash", "-c", "/scripts/enable-spark-ui.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: scripts
+          configMap:
+            name: cluster-url-getter
+            defaultMode: 0755
+      restartPolicy: Never
+  backoffLimit: 1
+{{- end }}

@@ -1,6 +1,7 @@
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
+spark: &spark "Removed"
 
 enableGpuApp: true
 enableInfrastructureApp: true
@@ -25,7 +26,7 @@ configuration:
   RhoaiApp:
     installPlanApproval: *installPlanApproval
     rhoaiChannel: "stable-3.x"
-    rhoaiVersion: "rhods-operator.3.3.0"
+    rhoaiVersion: "rhods-operator.3.3.2"
 
     operatorReplicas: 1
     dashboardReplicas: 1
@@ -34,6 +35,8 @@ configuration:
       create: true
 
       components:
+        sparkoperator:
+          managementState: *spark
         kserve:
           managementState: Managed
           nim:
