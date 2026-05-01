@@ -20,6 +20,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "35"
 spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 3
   template:
     spec:
       containers:
@@ -35,5 +37,4 @@ spec:
             name: enable-spark-ui
             defaultMode: 0755
       restartPolicy: Never
-  backoffLimit: 1
 {{- end }}
