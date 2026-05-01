@@ -1,4 +1,4 @@
-oc patch deployment/spark-operator-controller --type=json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+oc patch -n redhat-ods-applications deployment/spark-operator-controller --type=json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
 
 sleep 3
 
