@@ -1,6 +1,7 @@
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
+spark: &spark "Removed"
 
 enableGpuApp: true
 enableInfrastructureApp: true
@@ -34,6 +35,8 @@ configuration:
       create: true
 
       components:
+        sparkoperator:
+          managementState: *spark
         kserve:
           managementState: Managed
           nim:

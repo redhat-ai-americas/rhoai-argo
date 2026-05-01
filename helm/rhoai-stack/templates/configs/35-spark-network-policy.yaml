@@ -1,0 +1,30 @@
+{{- if not (eq .Values.spark "Removed") }}
+# See https://redhat.atlassian.net/browse/RHOAIENG-53206
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: spark-operator-allow-internal
+  namespace: redhat-ods-applications
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
+spec:
+  podSelector:
+    matchLabels:
+      sparkoperator.k8s.io/launched-by-spark-operator: 'true'
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 7078
+        - protocol: TCP
+          port: 7079
+        - protocol: TCP
+          port: 4040
+      from:
+        - podSelector: {}
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+  policyTypes:
+    - Ingress
+{{- end }}

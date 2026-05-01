@@ -1,0 +1,40 @@
+{{- if not (eq .Values.spark "Removed") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enable-spark-ui
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
+data:
+  enable-spark-ui.sh: |-
+    {{ .Files.Get "files/enable-spark-ui.sh" | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: enable-spark-ui
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "35"
+spec:
+  template:
+    spec:
+      containers:
+        - name: installer
+          image: registry.redhat.io/openshift4/ose-cli:latest
+          command: ["/bin/bash", "-c", "/scripts/enable-spark-ui.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: scripts
+          configMap:
+            name: enable-spark-ui
+            defaultMode: 0755
+      restartPolicy: Never
+      serviceAccountName: openshift-gitops-argocd-application-controller
+  backoffLimit: 1
+{{- end }}

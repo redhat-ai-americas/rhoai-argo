@@ -4,6 +4,7 @@ rhoaiChannel: "stable-3.3"
 rhoaiVersion: "rhods-operator.3.3.2"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
+spark: &spark "Removed"
 
 operatorReplicas: 1
 dashboardReplicas: 1
@@ -12,6 +13,8 @@ dataScienceCluster:
   create: true
 
   components:
+    sparkoperator:
+      managementState: *spark
     kserve:
       managementState: Managed
       modelsAsService:
