@@ -24,6 +24,9 @@ metadata:
 spec:
   channel: stable
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+  {{- if .Values.rhclVersion }}
+  startingCSV: {{ .Values.rhclVersion }}
+  {{- end }}
   name: rhcl-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
