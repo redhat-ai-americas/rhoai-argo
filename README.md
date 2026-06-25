@@ -76,6 +76,9 @@ oc apply -f app-of-apps.yaml
 3. Click on the InstallPlan name in the first column, **Installxxxxx > Preview InstallPlan > Approve**. (Or use the tip below)
 4. To get back to the list, click on **InstallPlans** in the path at the top left. **Make sure** you are on **all projects** from the namespace dropdown menu at the top of the screen to see all InstallPlans.
 
+> [!NOTE]
+> You should ignore the second Service Mesh install. The correct version for OSSM is v3.1.0, DO NOT approve the InstallPlan for Service Mesh v3.3.3. This is a bug with RCCL.
+
 > [!TIP]
 > **Bulk Approval:** To approve all currently waiting InstallPlans at once, run:
 > ```bash
