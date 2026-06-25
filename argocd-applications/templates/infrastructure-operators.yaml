@@ -13,7 +13,7 @@ spec:
   source:
     path: helm/infrastructure-utilities
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: main
+    targetRevision: maas
     helm:
       valuesObject:
         {{- .Values.configuration.infrastructureApp | toYaml | nindent 8 }}

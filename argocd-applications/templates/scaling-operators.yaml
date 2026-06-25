@@ -13,7 +13,7 @@ spec:
   source:
     path: helm/workload-scaling
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: main
+    targetRevision: maas
     helm:
       valuesObject:
         {{- .Values.configuration.WorkloadScalingApp | toYaml | nindent 8 }}

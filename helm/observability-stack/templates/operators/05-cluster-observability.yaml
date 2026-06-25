@@ -29,3 +29,6 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+  {{- if .Values.cooVersion }}
+  startingCSV: {{ .Values.cooVersion }}
+  {{- end }}

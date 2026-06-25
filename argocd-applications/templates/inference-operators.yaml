@@ -1,22 +1,22 @@
-{{- if .Values.enableGpuApp }}
+{{- if and .Values.enableInferenceApp .Values.enableObservabilityApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: gpu-operator-installation
+  name: inference-stack-operators
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "10"
+    argocd.argoproj.io/sync-wave: "20"
 spec:
   destination:
     name: in-cluster
     namespace: openshift-gitops
   source:
-    path: helm/gpu-operator-installation
+    path: helm/inference-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: maas
     helm:
       valuesObject:
-        {{- .Values.configuration.gpuApp | toYaml | nindent 8 }}
+        {{- .Values.configuration.infrastructureApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:
