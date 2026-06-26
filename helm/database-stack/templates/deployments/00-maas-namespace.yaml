@@ -1,0 +1,8 @@
+{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: maas-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+{{- end }}

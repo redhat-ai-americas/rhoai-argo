@@ -1,3 +1,6 @@
+global:
+  toolsImage: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
+
 installPlanApproval: Manual
 
 rhoaiChannel: "stable-3.4"
@@ -5,9 +8,19 @@ rhoaiVersion: "rhods-operator.3.4.0"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
+maas: &maas "Managed"
 
 operatorReplicas: 1
 dashboardReplicas: 1
+
+dataScienceClusterInitialization:
+  monitoring:
+    managementState: Managed
+    namespace: redhat-ods-monitoring
+    metrics:
+      storage:
+        size: 5Gi
+        retention: 1d
 
 dataScienceCluster:
   create: true
@@ -18,7 +31,7 @@ dataScienceCluster:
     kserve:
       managementState: Managed
       modelsAsService:
-        managementState: Managed
+        managementState: *maas
       nim:
         managementState: Managed
       rawDeploymentServiceConfig: Headed
@@ -59,7 +72,7 @@ userGroups:
 dashboardConfig:
   genAiStudio: true
   modelAsService: true
-  mlflow: true
+  observabilityDashboard: true
 
 defaultWorkbenchPvcSize: 20Gi
 showJupyterInEnabledApplications: true

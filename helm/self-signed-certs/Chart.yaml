@@ -1,0 +1,9 @@
+apiVersion: v2
+name: rhoai-self-signed-certs
+description: GitOps for installing Self-signed certs to help with some components for RHOAI
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"

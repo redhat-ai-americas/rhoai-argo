@@ -1,0 +1,34 @@
+{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openshift-ai-maas
+  namespace: maas-db
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "15"
+spec:
+  bootstrap:
+    initdb:
+      database: maas
+      owner: maas
+  certificates:
+    serverCASecret: openshift-ai-maas-certificate
+    serverTLSSecret: openshift-ai-maas-certificate
+  instances: 1
+  managed:
+    roles:
+      - login: true
+        name: maas
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  {{- with .Values.maasDb.storage }}
+  storage:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

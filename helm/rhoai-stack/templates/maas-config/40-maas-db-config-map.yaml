@@ -1,0 +1,12 @@
+{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-maas-db-config-script
+  namespace: maas-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "40"
+data:
+  create-maas-db-config.sh: |-
+    {{ .Files.Get "files/create-maas-db-config.sh" | nindent 4 }}
+{{- end }}

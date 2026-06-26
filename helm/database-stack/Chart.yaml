@@ -1,0 +1,9 @@
+apiVersion: v2
+name: rhoai-database-stack
+description: GitOps for installing Cloud Native Postgres components for RHOAI. Note that this is a partner-provided operator and if support is expected, you should reach out to them.
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"

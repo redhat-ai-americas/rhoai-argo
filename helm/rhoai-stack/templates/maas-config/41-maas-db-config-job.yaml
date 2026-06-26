@@ -1,0 +1,30 @@
+{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-maas-db-config
+  namespace: maas-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "41"
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      serviceAccountName: create-maas-db-config
+      restartPolicy: Never
+      containers:
+        - name: create-maas-db-config
+          image: {{ $.Values.global.toolsImage }}
+          imagePullPolicy: IfNotPresent
+          workingDir: /app
+          command: ["/app/create-maas-db-config.sh"]
+          args: []
+          volumeMounts:
+            - name: create-maas-db-config-script
+              mountPath: /app
+      volumes:
+        - name: create-maas-db-config-script
+          configMap:
+            name: create-maas-db-config-script
+            defaultMode: 493
+{{- end }}

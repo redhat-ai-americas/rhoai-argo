@@ -1,7 +1,11 @@
+global:
+  toolsImage: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
+
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
+maas: &maas "Managed"
 
 enableGpuApp: true
 enableInferenceApp: true
@@ -11,6 +15,14 @@ enableRhoaiApp: true
 enableWorkloadScalingApp: true
 
 configuration:
+  databaseApp:
+    installPlanApproval: *installPlanApproval
+    maasDb:
+      enableMaas: *maas
+      storage:
+        size: 2Gi
+        storageClass: gp3-csi
+
   gpuApp:
     installPlanApproval: *installPlanApproval
     enableRdma: false
@@ -35,6 +47,15 @@ configuration:
     operatorReplicas: 1
     dashboardReplicas: 1
 
+    dataScienceClusterInitialization:
+      monitoring:
+        managementState: Managed
+        namespace: redhat-ods-monitoring
+        metrics:
+          storage:
+            size: 5Gi
+            retention: 1d
+
     dataScienceCluster:
       create: true
 
@@ -46,6 +67,8 @@ configuration:
           nim:
             managementState: Managed
           rawDeploymentServiceConfig: Headed
+          modelsAsService:
+            managementState: *maas
         modelregistry:
           managementState: Managed
           registriesNamespace: rhoai-model-registries
@@ -83,9 +106,12 @@ configuration:
     dashboardConfig:
       genAiStudio: true
       modelAsService: true
+      observabilityDashboard: true
 
     defaultWorkbenchPvcSize: 20Gi
     showJupyterInEnabledApplications: true
+
+  selfSignedCerts: {}
 
   WorkloadScalingApp:
     installPlanApproval: *installPlanApproval
