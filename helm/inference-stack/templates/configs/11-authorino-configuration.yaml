@@ -2,7 +2,7 @@ apiVersion: operator.authorino.kuadrant.io/v1beta1
 kind: Authorino
 metadata:
   name: authorino
-  namespace: kuadrant-system
+  namespace: openshift-connectivity-link
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true,ServerSideApply=true
     argocd.argoproj.io/sync-wave: "11"
