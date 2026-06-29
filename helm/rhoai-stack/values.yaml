@@ -4,7 +4,7 @@ global:
 installPlanApproval: Manual
 
 rhoaiChannel: "stable-3.4"
-rhoaiVersion: "rhods-operator.3.4.0"
+rhoaiVersion: "rhods-operator.3.4.1"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"

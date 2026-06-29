@@ -16,7 +16,7 @@ spec:
     targetRevision: maas
     helm:
       valuesObject:
-        {{- .Values.configuration.ObservabilityApp | toYaml | nindent 8 }}
+        {{- .Values.configuration.observabilityApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:

@@ -39,11 +39,11 @@ configuration:
   infrastructureApp:
     installPlanApproval: *installPlanApproval
 
-  ObservabilityApp:
+  observabilityApp:
     installPlanApproval: *installPlanApproval
     cooVersion: cluster-observability-operator.v1.4.0
 
-  RhoaiApp:
+  rhoaiApp:
     externalDatabase: *externalDatabase
     installPlanApproval: Manual
 
@@ -116,7 +116,7 @@ configuration:
 
   selfSignedCerts: {}
 
-  WorkloadScalingApp:
+  workloadScalingApp:
     installPlanApproval: *installPlanApproval
     kueue: *kueue
     trainer: *trainer

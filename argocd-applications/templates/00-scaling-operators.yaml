@@ -16,7 +16,7 @@ spec:
     targetRevision: maas
     helm:
       valuesObject:
-        {{- .Values.configuration.WorkloadScalingApp | toYaml | nindent 8 }}
+        {{- .Values.configuration.workloadScalingApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:

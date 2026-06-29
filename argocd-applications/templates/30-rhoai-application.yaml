@@ -16,7 +16,7 @@ spec:
     targetRevision: maas
     helm:
       valuesObject:
-        {{- .Values.configuration.RhoaiApp | toYaml | nindent 8 }}
+        {{- .Values.configuration.rhoaiApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:
