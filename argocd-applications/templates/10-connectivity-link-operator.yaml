@@ -2,21 +2,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: inference-stack-operators
+  name: connectivity-link-operator
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   destination:
     name: in-cluster
     namespace: openshift-gitops
   source:
-    path: helm/inference-stack
+    path: helm/connectivity-link
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
     targetRevision: maas
     helm:
       valuesObject:
-        {{- .Values.configuration.infrastructureApp | toYaml | nindent 8 }}
+        {{- .Values.configuration.inferenceApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
     automated:
@@ -36,13 +36,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         argocd.argoproj.io/managed-by: openshift-gitops
-  ignoreDifferences:
-    - group: ://coreos.com
-      kind: Subscription
-      jsonPointers:
-        - /status
-    - group: ://coreos.com
-      kind: InstallPlan
-      jsonPointers:
-        - /spec/approved
 {{- end }}
