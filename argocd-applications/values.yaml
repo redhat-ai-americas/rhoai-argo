@@ -34,7 +34,7 @@ configuration:
 
   inferenceApp:
     installPlanApproval: *installPlanApproval
-    rhclVersion: 1.3.4
+    rhclVersion: rhcl-operator.v1.3.4
 
   infrastructureApp:
     installPlanApproval: *installPlanApproval
