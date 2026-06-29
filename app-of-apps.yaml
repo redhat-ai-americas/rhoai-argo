@@ -13,12 +13,14 @@ spec:
       valuesObject:
         installPlanApproval: Manual
         addSelfSignedCerts: true
-        externalDatabase: &externalDatabase false
+        externalDatabase: false
         configuration:
           gpuApp:
             nvidiaGpuChannel: "v25.10"
             nvidiaGpuVersion: 'gpu-operator-certified.v25.10.1'
             nvidiaGpuDriverVersion: 580.126.20
+          rhoaiApp:
+            externalDatabase: false
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops
