@@ -1,4 +1,4 @@
-{{- if not (or (eq .Values.maasDb.maas "Removed") .Values.externalDatabase) }}
+{{- if not (or (eq .Values.maas "Removed") .Values.externalDatabase) }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
