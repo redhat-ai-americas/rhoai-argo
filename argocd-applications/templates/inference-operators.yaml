@@ -36,4 +36,13 @@ spec:
     managedNamespaceMetadata:
       labels:
         argocd.argoproj.io/managed-by: openshift-gitops
+  ignoreDifferences:
+    - group: ://coreos.com
+      kind: Subscription
+      jsonPointers:
+        - /status
+    - group: ://coreos.com
+      kind: InstallPlan
+      jsonPointers:
+        - /spec/approved
 {{- end }}
