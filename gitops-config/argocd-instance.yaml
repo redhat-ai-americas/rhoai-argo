@@ -23,17 +23,24 @@ spec:
           end
         end
         return hs
+  resourceHealthChecks:
     - group: operators.coreos.com
       kind: Subscription
       check: |
         hs = {}
-        if obj.status ~= nil and obj.status.state == "AtLatestKnown" then
-          hs.status = "Healthy"
-          hs.message = "Operator installed"
-        else
-          hs.status = "Progressing"
-          hs.message = "Waiting for CSV"
+        if obj.status ~= nil then
+          if obj.status.state ~= nil then
+            hs.status = "Healthy"
+            hs.message = obj.status.state
+            return hs
+          elseif obj.status.installplan ~= nil then
+            hs.status = "Progressing"
+            hs.message = "InstallPlan: " .. obj.status.installplan.name
+            return hs
+          end
         end
+        hs.status = "Degraded"
+        hs.message = "Not at latest version, no known InstallPlan"
         return hs
 ---
 apiVersion: operator.openshift.io/v1

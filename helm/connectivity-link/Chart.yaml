@@ -1,9 +1,0 @@
-apiVersion: v2
-name: rhoai-inferece-stack-gitops
-description: GitOps for installing Red Hat Connectivity Link
-
-type: application
-
-version: 0.1.0
-
-appVersion: "1.0.0"

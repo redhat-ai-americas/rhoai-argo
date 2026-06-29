@@ -1,1 +1,2 @@
 installPlanApproval: Manual
+rhclVersion: rhcl-operator.v1.3.4
