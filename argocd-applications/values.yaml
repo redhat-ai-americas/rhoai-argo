@@ -41,7 +41,7 @@ configuration:
 
   ObservabilityApp:
     installPlanApproval: *installPlanApproval
-    cooVersion: 1.4.0
+    cooVersion: cluster-observability-operator.v1.4.0
 
   RhoaiApp:
     externalDatabase: *externalDatabase
