@@ -6,6 +6,7 @@ metadata:
   namespace: maas-db
   annotations:
     argocd.argoproj.io/sync-wave: "41"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   backoffLimit: 3
   template:

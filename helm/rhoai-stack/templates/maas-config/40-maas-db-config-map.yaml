@@ -6,6 +6,7 @@ metadata:
   namespace: maas-db
   annotations:
     argocd.argoproj.io/sync-wave: "40"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 data:
   create-maas-db-config.sh: |-
     {{ .Files.Get "files/create-maas-db-config.sh" | nindent 4 }}
