@@ -9,5 +9,5 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 data:
   create-maas-db-config.sh: |-
-    {{ .Files.Get "files/mass-config/create-maas-db-config.sh" | nindent 4 }}
+    {{ .Files.Get "files/maas-config/create-maas-db-config.sh" | nindent 4 }}
 {{- end }}
