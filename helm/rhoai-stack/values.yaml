@@ -9,6 +9,7 @@ kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
 maas: &maas "Managed"
+externalDatabase: true
 
 operatorReplicas: 1
 dashboardReplicas: 1

@@ -4,8 +4,9 @@ global:
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
-spark: &spark "Removed"
+spark: &spark "Managed"
 maas: &maas "Managed"
+externalDatabase: &externalDatabase true
 
 enableGpuApp: true
 enableInferenceApp: true
@@ -13,6 +14,7 @@ enableInfrastructureApp: true
 enableObservabilityApp: true
 enableRhoaiApp: true
 enableWorkloadScalingApp: true
+addSelfSignedCerts: false
 
 configuration:
   databaseApp:
@@ -42,6 +44,7 @@ configuration:
     cooVersion: 1.4.0
 
   RhoaiApp:
+    externalDatabase: *externalDatabase
     installPlanApproval: Manual
 
     operatorReplicas: 1

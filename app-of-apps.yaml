@@ -12,6 +12,8 @@ spec:
     helm:
       valuesObject:
         installPlanApproval: Manual
+        addSelfSignedCerts: true
+        externalDatabase: &externalDatabase false
         configuration:
           gpuApp:
             nvidiaGpuChannel: "v25.10"

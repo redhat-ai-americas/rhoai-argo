@@ -1,4 +1,4 @@
-{{- if not .Values.enableDatabaseManager }}
+{{- if not .Values.externalDatabase }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

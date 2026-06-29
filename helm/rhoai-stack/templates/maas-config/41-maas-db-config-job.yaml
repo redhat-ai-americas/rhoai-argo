@@ -1,4 +1,4 @@
-{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
+{{- if not (or (eq .Values.maasDb.enableMaas "Removed") .Values.externalDatabase) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
