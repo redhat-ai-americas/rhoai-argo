@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    opendatahub.io/managed: 'false'
+    security.opendatahub.io/authorino-tls-bootstrap: 'true'
+    argocd.argoproj.io/sync-wave: "17"
+  labels:
+    opendatahub.io/managed: 'false'
+  name: maas-default-gateway
+  namespace: openshift-ingress
+spec:
+  gatewayClassName: openshift-default
+  infrastructure:
+    parametersRef:
+      group: ''
+      kind: ConfigMap
+      name: maas-default-gateway-config
+  listeners:
+    - allowedRoutes:
+        namespaces:
+          from: All
+      hostname: maas{{- .Values.global.clusterBaseUrl -}}
+      name: https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: cert-manager-ingress-cert # this is the default for RHDP-provisioned cert-manager wildcard cert
+        mode: Terminate
