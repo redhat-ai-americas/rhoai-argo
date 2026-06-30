@@ -15,3 +15,4 @@ cp $1 $NEWFILE
 echo "New file location is $NEWFILE"
 
 yq -i ".spec.source.helm.valuesObject.global.clusterBaseUrl = \"$BASE_URL\"" $NEWFILE
+oc apply -f $NEWFILE
