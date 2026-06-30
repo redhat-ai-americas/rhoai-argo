@@ -20,7 +20,7 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: maas{{- .Values.global.clusterBaseUrl -}}
+      hostname: 'maas{{- .Values.global.clusterBaseUrl -}}'
       name: https
       port: 443
       protocol: HTTPS
@@ -28,5 +28,5 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: cert-manager-ingress-cert # this is the default for RHDP-provisioned cert-manager wildcard cert
+            name: cert-manager-ingress-cert # You may need to change this for your specific cluster.
         mode: Terminate
