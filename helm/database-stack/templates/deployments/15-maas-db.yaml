@@ -18,7 +18,10 @@ spec:
   instances: 1
   managed:
     roles:
-      - login: true
+      - connectionLimit: -1	
+        ensure: present	
+        inherit: true	
+        login: true
         name: maas
   resources:
     limits:
