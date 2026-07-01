@@ -13,7 +13,7 @@ spec:
       valuesObject:
         installPlanApproval: Manual
         addSelfSignedCerts: true
-        externalDatabase: &externalDatabase true
+        externalDatabase: &externalDatabase false
         configuration:
           gpuApp:
             nvidiaGpuChannel: "v25.10"
