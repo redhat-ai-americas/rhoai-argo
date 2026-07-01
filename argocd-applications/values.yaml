@@ -36,6 +36,7 @@ configuration:
   inferenceApp:
     installPlanApproval: *installPlanApproval
     rhclVersion: rhcl-operator.v1.3.4
+    certManagerCertSecret: cert-manager-ingress-cert
 
   infrastructureApp:
     installPlanApproval: *installPlanApproval

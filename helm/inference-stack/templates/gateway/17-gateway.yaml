@@ -28,5 +28,5 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: cert-manager-ingress-cert # You may need to change this for your specific cluster.
+            name: {{ .Values.certManagerCertSecret }}
         mode: Terminate
