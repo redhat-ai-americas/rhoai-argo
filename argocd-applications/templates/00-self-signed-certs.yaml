@@ -17,8 +17,10 @@ spec:
     helm:
       valuesObject:
         global:
-          {{- .Values.global | toYaml | nindent 10 }}
-        {{- .Values.configuration.selfSignedCerts | toYaml | nindent 8 }}
+          {{- .Values.global | toYaml | nindent 10 -}}
+{{- if .Values.configuration.selfSignedCerts -}}
+{{- .Values.configuration.selfSignedCerts | toYaml | nindent 8 }}
+{{- end }}
   project: default
   syncPolicy:
     automated:
