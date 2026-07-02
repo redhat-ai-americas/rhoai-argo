@@ -8,9 +8,6 @@ metadata:
 spec:
   channel: stable-v1
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
-  {{- if .Values.cnpgVersion }}
-  startingCSV: {{ .Values.cnpgVersion }}
-  {{- end }}
   name: cloudnative-pg
   source: certified-operators
   sourceNamespace: openshift-marketplace
