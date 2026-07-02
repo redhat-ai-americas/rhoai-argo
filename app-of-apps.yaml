@@ -15,7 +15,7 @@ spec:
           clusterBaseUrl: ''
         installPlanApproval: Manual
         addSelfSignedCerts: true
-        externalDatabase: &externalDatabase true
+        externalDatabase: &externalDatabase false
         configuration:
           inferenceApp:
             certManagerCertSecret: cert-manager-ingress-cert
