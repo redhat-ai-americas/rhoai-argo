@@ -6,8 +6,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "5"
 spec:
-  channel: stable-v1
+  channel: stable
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+  {{- if .Values.cnpgVersion }}
+  startingCSV: {{ .Values.cnpgVersion }}
+  {{- end }}
   name: cloudnative-pg
   source: certified-operators
   sourceNamespace: openshift-marketplace

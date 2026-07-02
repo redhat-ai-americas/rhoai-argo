@@ -1,5 +1,7 @@
 installPlanApproval: Manual
 
+cnpgVersion: cloudnative-pg.v1.29.2
+
 maasDb:
   enableMaas: Managed
   storage:
