@@ -1,3 +1,4 @@
+{{- if .Values.enableRdma }}
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovOperatorConfig
 metadata:
@@ -15,4 +16,5 @@ spec:
     network.nvidia.com/operator.mofed.wait: "false"
     node-role.kubernetes.io/worker: ""
     feature.node.kubernetes.io/pci-15b3.sriov.capable: "true"
+{{- end }}
 {{- end }}
