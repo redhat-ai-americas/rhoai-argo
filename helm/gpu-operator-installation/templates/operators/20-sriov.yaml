@@ -1,3 +1,4 @@
+{{- if .Values.enableRdma }}
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -32,3 +33,4 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
+{{- end }}
