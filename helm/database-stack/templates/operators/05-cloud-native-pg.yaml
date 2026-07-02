@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "5"
 spec:
-  channel: stable
+  channel: stable-v1
   installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
   {{- if .Values.cnpgVersion }}
   startingCSV: {{ .Values.cnpgVersion }}
