@@ -1,4 +1,4 @@
-# rhoai-argo
+# rhoai-argo (Now with Models as a Service!)
 
 Deployment of **Red Hat OpenShift AI (RHOAI)** and its required infrastructure stack using Helm and ArgoCD.
 
@@ -55,63 +55,84 @@ oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 
 ---
 
-## 📦 2. Trigger "App-of-Apps" Deployment
+## 📦 2. Trigger Cluster Deployment - **MaaS**
 
-- Apply the yaml file for our **App-of-Apps** pattern controlled via sync waves.
+* Apply the core deployment configuration controlled via sync waves. This process dynamically configures the **MaaS** functionality based on your active cluster's URL.
 
-### Installation (Manual Approval)
-- Operators will require manual approval for any version upgrades in the OpenShift Console.
+### Installation (InstallPlans)
+
+* Operators will require manual approval for any version upgrades in the OpenShift Console.
+* Instead of running a direct `oc apply`, you must first extract your current cluster's connection URLs to properly target the environment. The command block below fetches and formats your specific cluster route, changes the permissions of the build script to be executable, and matches the target file path before running the deployment.
+
 ```bash
-oc apply -f app-of-apps.yaml
-```
+CONSOLE_URL=$(oc get route console -n openshift-console -o go-template='{{if .spec.tls}}https://{{else}}http://{{end}}{{.spec.host}}{{"\n"}}') && \
+BASE_URL=.apps$(echo $CONSOLE_URL | sed 's/^.*apps//g') && \
+chmod +x build-cluster-application.sh && \
+./build-cluster-application.sh "cluster-applications/${BASE_URL:6}-app-of-apps.yaml)"
 
+```
 ---
 
 ### Approve InstallPlans
 > [!NOTE]
-> You must approve the InstallPlan requests as they attempt to install. This is to avoid automatic updates on your AI workloads. In order to use Automatic updates, first push this to an empty repository and update the app templates to point to git url. Then, change the end of the first line in *argocd-applications/values.yaml* from **Manual** to **Automatic**
+> You must approve the InstallPlan requests as they attempt to install. This is to avoid automatic updates on your AI workloads. In order to use Automatic updates, first push this to an empty repository and update the app templates to point to git url. Then, change the global value in the first line of *argocd-applications/values.yaml* from **Manual** to **Automatic**
 
 1. In the OpenShift Dashboard, navigate to **Home > Search**.
 2. The search bar, where it says *Resources*, type **"InstallPlan"** select the resource type.
 3. Click on the InstallPlan name in the first column, **Installxxxxx > Preview InstallPlan > Approve**. (Or use the tip below)
-4. To get back to the list, click on **InstallPlans** in the path at the top left. **Make sure** you are on **all projects** from the namespace dropdown menu at the top of the screen to see all InstallPlans.
+4. To get back to the list, click on **InstallPlans** highlight at the top left. **Make sure** you are on **all projects** from the namespace dropdown menu at the top of the screen to see all InstallPlans.
 
-> [!NOTE]
-> You should ignore the second Service Mesh install. The correct version for OSSM is v3.1.0, DO NOT approve the InstallPlan for Service Mesh v3.3.3. This is a bug with RCCL.
+> [!WARNING]
+> You should **ignore installplans upgrading to the next version of operators**, specifically, **ingore the second Service Mesh installplan/upgrade**. The correct version for OSSM is v3.1.0, DO NOT approve the InstallPlan for Service Mesh v3.3.3. This is a bug with RCCL.
 
-> [!TIP]
-> **Bulk Approval:** To approve all currently waiting InstallPlans at once, run:
-> ```bash
-> oc get installplan -A --no-headers | grep "false" | awk '{print $1, $2}' | xargs -L1 sh -c 'oc patch installplan $1 -n $0 --type merge -p "{\"spec\":{\"approved\":true}}"'
-> ```
->
-> **Rolling Approval:** To approve all pending and future InstallPlans, run:
-> ```bash
-> oc get installplan -A -w -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase --no-headers | while read -r namespace name phase; do
->      if [ "$phase" = "RequiresApproval" ]; then
->       echo "Detected ready InstallPlan: $name in $namespace. Approving..."
->       oc patch installplan "$name" -n "$namespace" --type merge -p '{"spec":{"approved":true}}'
->   fi
-> done
-> ```
+### For Demo Purposes Only
 
+> [!CAUTION]
+> The following script should only be used in demo environments to speed up cluster bootstrapping. It runs continuously in the background, watching for new InstallPlans. It automatically **approves first-time installations only** by checking the operator's Subscription status, ignoring any upgrades.
 
+```bash
+oc get installplan -A -w --no-headers -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase | while read -r ns ip phase; do
+  if [[ "$phase" == "RequiresApproval" ]]; then
+    SUB=$(oc get sub -n "$ns" -o json | jq -r --arg IP "$ip" '.items[] | select(.status.installplan.name==$IP) | .metadata.name')
+    [[ -n "$SUB" && -z "$(oc get sub "$SUB" -n "$ns" -o jsonpath='{.status.installedCSV}')" ]] && \
+      echo "Approving initial install: $ip in $ns" && \
+      oc patch installplan "$ip" -n "$ns" --type merge -p '{"spec":{"approved":true}}'
+  fi
+done
+
+```
 ---
 
 ## 🖥️ 3. Monitor ArgoCD
 
-- The ArgoCD dashboard is available via the **Waffle Menu** in the OpenShift Console header. Alternatively, retrieve the URL directly:
+* The ArgoCD dashboard is available via the **Waffle Menu** in the OpenShift Console header. Alternatively, retrieve the URL directly:
 
 ```bash
 # Get the ArgoCD URL
-oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}'
+oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='https://{.spec.host}{"\n"}'
+
 ```
 
 
+> [!IMPORTANT]
+> * Wait for the `rhoai-deployment` and **RHCL** (Red Hat Connectivity Link) ArgoCD applications to reach a **Healthy** state.
+> **Required: Reset the Kuadrant Operator** > Once the deployments are healthy manually kill the Kuadrant Operator Controller Pod. This forces the operator to recognize and load all of the newly applied MaaS configuration.
+> **Via the OpenShift Console:**
+> 1. Navigate to **Workloads > Pods**.
+> 2. Select the **openshift-connectivity-link** project from the namespace dropdown.
+> 3. Locate the pod starting with `kuadrant-operator-controller-manager...`.
+> 4. Click the options menu (⋮) on the right and select **Delete Pod**.
+> 
+> 
+> **Via the CLI:**
+> ```bash
+> oc delete pod $(oc get pods -n openshift-connectivity-link | grep kuadrant-operator-controller | awk '{print $1}') -n openshift-connectivity-link
+> 
+> ```
+> 
+> 
 
-**Wait for the `rhoai-deployment` ArgoCD application to reach a Healthy state, and... Enjoy using RHOAI!**
-
----
+**Once the fresh pod spins up, verify that there are no errors in the API Keys side tab in RHOAI. Enjoy using your Models as a Service OpenShift AI environment!**
 
 ## 🛠️ 4. Configure Hardware (Optional)
 
