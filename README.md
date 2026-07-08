@@ -32,7 +32,7 @@ To initialize RHOAI, install OpenShift GitOps, configure permissions, and trigge
 
 ### 0. Clone the Repository
 ```bash
-git clone https://github.com/redhat-ai-americas/rhoai-argo.git
+git clone https://github.com/redhat-ai-americas/rhoai-argo.git/tree/maas
 cd rhoai-argo
 ```
 
@@ -62,14 +62,11 @@ oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 ### Installation (InstallPlans)
 
 * Operators will require manual approval for any version upgrades in the OpenShift Console.
-* Instead of running a direct `oc apply`, you must first extract your current cluster's connection URLs to properly target the environment. The command block below fetches and formats your specific cluster route, changes the permissions of the build script to be executable, and matches the target file path before running the deployment.
+* Instead of running a direct `oc apply`, we need to run a script to extract your current cluster's connection URLs and properly target the environment. You will see a "cluster-applications" folder appear with the newly generated app-of-apps file for your cluster url. That will automatically be used for the ArgoCD deployment.
 
 ```bash
-CONSOLE_URL=$(oc get route console -n openshift-console -o go-template='{{if .spec.tls}}https://{{else}}http://{{end}}{{.spec.host}}{{"\n"}}') && \
-BASE_URL=.apps$(echo $CONSOLE_URL | sed 's/^.*apps//g') && \
 chmod +x build-cluster-application.sh && \
-./build-cluster-application.sh "cluster-applications/${BASE_URL:6}-app-of-apps.yaml)"
-
+./build-cluster-application.sh app-of-apps.yaml
 ```
 ---
 
