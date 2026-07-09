@@ -32,8 +32,9 @@ To initialize RHOAI, install OpenShift GitOps, configure permissions, and trigge
 
 ### 0. Clone the Repository
 ```bash
-git clone https://github.com/redhat-ai-americas/rhoai-argo.git/tree/maas
+git clone https://github.com/redhat-ai-americas/rhoai-argo.git
 cd rhoai-argo
+git fetch origin maas
 ```
 
 ### 1. Prepare OpenShift GitOps (~60 seconds)
