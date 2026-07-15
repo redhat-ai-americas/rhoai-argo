@@ -3,19 +3,14 @@ kind: ConfigMap
 metadata:
   name: maas-default-gateway-config
   namespace: openshift-ingress
-  annotations:
-    argocd.argoproj.io/sync-wave: "16"
 data:
-  deployment: |
+  service: |
+    metadata:
+      annotations:
+        # OpenShift service-ca-operator auto-provisions a TLS certificate into this Secret.
+        # The Secret name here MUST match the certificateRefs in the Gateway listener.
+        service.beta.openshift.io/serving-cert-secret-name: "maas-gateway-cert"
     spec:
-      template:
-        spec:
-          containers:
-          - name: istio-proxy
-            resources:
-                limits:
-                  cpu: "2"
-                  memory: 2Gi
-                requests:
-                  cpu: 100m
-                  memory: 256Mi
+      # ClusterIP avoids provisioning an external LoadBalancer; the OpenShift Route
+      # handles external ingress instead.
+      type: ClusterIP
