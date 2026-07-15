@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   annotations:
     opendatahub.io/managed: 'false'
-    security.opendatahub.io/authorino-tls-bootstrap: 'true'
-    argocd.argoproj.io/sync-wave: "17"
   labels:
     opendatahub.io/managed: 'false'
   name: maas-default-gateway
@@ -20,7 +18,6 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: 'maas{{- .Values.global.clusterBaseUrl -}}'
       name: https
       port: 443
       protocol: HTTPS
@@ -28,5 +25,5 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: {{ .Values.certManagerCertSecret }}
+            name: 'maas-gateway-cert'
         mode: Terminate
