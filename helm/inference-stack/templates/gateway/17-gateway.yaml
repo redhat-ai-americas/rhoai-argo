@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   annotations:
     opendatahub.io/managed: 'false'
+    security.opendatahub.io/authorino-tls-bootstrap: 'true'
+    argocd.argoproj.io/sync-wave: "17"
   labels:
     opendatahub.io/managed: 'false'
   name: maas-default-gateway
@@ -25,5 +27,5 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: 'maas-gateway-cert'
+            name: {{ .Values.maasIngressCertSecret }}
         mode: Terminate

@@ -14,5 +14,12 @@ NEWFILE=cluster-applications/${BASE_URL:6}-$(basename $1)
 cp $1 $NEWFILE
 echo "New file location is $NEWFILE"
 
+SERVICE_CA_FILE=$(mktemp)
+oc get configmap signing-cabundle -n openshift-service-ca \
+  -o jsonpath='{.data.ca-bundle\.crt}' > "$SERVICE_CA_FILE"
+
 yq -i ".spec.source.helm.valuesObject.global.clusterBaseUrl = \"$BASE_URL\"" $NEWFILE
+yq -i ".spec.source.helm.valuesObject.global.serviceCABundle = load_str(\"$SERVICE_CA_FILE\")" $NEWFILE
+rm -f "$SERVICE_CA_FILE"
+
 oc apply -f $NEWFILE

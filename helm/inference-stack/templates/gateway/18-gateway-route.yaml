@@ -1,0 +1,22 @@
+{{- if and .Values.global.clusterBaseUrl .Values.global.serviceCABundle }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: maas-gateway-route
+  namespace: openshift-ingress
+  annotations:
+    argocd.argoproj.io/sync-wave: "18"
+spec:
+  host: maas{{ .Values.global.clusterBaseUrl }}
+  to:
+    kind: Service
+    name: maas-default-gateway-openshift-default
+    weight: 100
+  port:
+    targetPort: 443
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect
+    destinationCACertificate: |
+{{ .Values.global.serviceCABundle | nindent 6 }}
+{{- end }}
