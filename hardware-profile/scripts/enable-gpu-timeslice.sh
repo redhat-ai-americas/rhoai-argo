@@ -3,7 +3,7 @@ set -e
 
 # Dynamically locate the configs directory relative to this script
 CONFIG_DIR="$(dirname "$0")/configs"
-CONFIG_FILE="${CONFIG_DIR}/time-slicing-config.yaml"
+CONFIG_FILE="${CONFIG_DIR}/nvidia-gpu-timeslice-cm.yaml"
 
 echo "📂 Verifying configuration files..."
 if [ ! -f "$CONFIG_FILE" ]; then
