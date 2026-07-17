@@ -3,7 +3,7 @@ set -e
 
 # Dynamically locate the configs directory relative to this script
 CONFIG_DIR="$(dirname "$0")/configs"
-CONFIG_FILE="${CONFIG_DIR}/time-slicing-config.yaml"
+CONFIG_FILE="${CONFIG_DIR}/nvidia-gpu-timeslice-cm.yaml"
 
 echo "📂 Verifying configuration files..."
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -21,8 +21,8 @@ oc patch clusterpolicy gpu-cluster-policy --type='merge' -p '
   "spec": {
     "devicePlugin": {
       "config": {
-        "name": "time-slicing-config",
-        "default": "any"
+        "name": "nvidia-gpu-timeslice-cm",
+        "default": "time-sliced-8"
       }
     }
   }
