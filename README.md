@@ -89,14 +89,12 @@ chmod +x build-cluster-application.sh && \
 > The following script should only be used in demo environments to speed up cluster bootstrapping. It runs continuously in the background, watching for new InstallPlans. It automatically **approves first-time installations only** by checking the operator's Subscription status, ignoring any upgrades.
 
 ```bash
-oc get installplan -A -w --no-headers -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase | while read -r ns ip phase; do
-  if [[ "$phase" == "RequiresApproval" ]]; then
-    SUB=$(oc get sub -n "$ns" -o json | jq -r --arg IP "$ip" '.items[] | select(.status.installplan.name==$IP) | .metadata.name')
-    [[ -n "$SUB" && -z "$(oc get sub "$SUB" -n "$ns" -o jsonpath='{.status.installedCSV}')" ]] && \
-      echo "Approving initial install: $ip in $ns" && \
-      oc patch installplan "$ip" -n "$ns" --type merge -p '{"spec":{"approved":true}}'
-  fi
-done
+declare -A seen; while read -r ns ip phase; do
+  [[ "$phase" == "RequiresApproval" && -z "${seen["$ns/$ip"]}" ]] && \
+  SUB=$(oc get sub -n "$ns" -o json | jq -r --arg IP "$ip" '[.items[] | select(.status.installplan.name==$IP) | .metadata.name][0]') && \
+  [[ -n "$SUB" && "$SUB" != "null" && -z "$(oc get sub "$SUB" -n "$ns" -o jsonpath='{.status.installedCSV}' 2>/dev/null)" ]] && \
+  echo "Approving: $ip in $ns" && oc patch installplan "$ip" -n "$ns" --type merge -p '{"spec":{"approved":true}}' && seen["$ns/$ip"]=1
+done < <(oc get installplan -A -w --no-headers -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase)
 
 ```
 ---
