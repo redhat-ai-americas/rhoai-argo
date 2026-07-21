@@ -1,5 +1,5 @@
 global:
-  toolsImage: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
+  toolsImage: registry.redhat.io/openshift4/ose-tools-rhel9:v4.17.0-202606230157.p2.gd76df14.assembly.stream.el9
 
 installPlanApproval: Manual
 

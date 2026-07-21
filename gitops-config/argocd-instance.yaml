@@ -23,7 +23,6 @@ spec:
           end
         end
         return hs
-  resourceHealthChecks:
     - group: operators.coreos.com
       kind: Subscription
       check: |
