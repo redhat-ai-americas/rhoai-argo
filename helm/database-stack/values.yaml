@@ -4,4 +4,3 @@ maasDb:
   enableMaas: Managed
   storage:
     size: 2Gi
-    storageClass: gp3-csi

@@ -25,7 +25,6 @@ configuration:
       enableMaas: *maas
       storage:
         size: 2Gi
-        storageClass: gp3-csi
 
   gpuApp:
     installPlanApproval: *installPlanApproval
