@@ -20,7 +20,6 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: 'maas{{- .Values.global.clusterBaseUrl -}}'
       name: https
       port: 443
       protocol: HTTPS
@@ -28,5 +27,5 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: {{ .Values.certManagerCertSecret }}
+            name: {{ .Values.maasIngressCertSecret }}
         mode: Terminate

@@ -1,6 +1,7 @@
 global:
   toolsImage: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
   clusterBaseUrl: ''
+  serviceCABundle: ''
 
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
@@ -36,7 +37,7 @@ configuration:
   inferenceApp:
     installPlanApproval: *installPlanApproval
     rhclVersion: rhcl-operator.v1.3.4
-    certManagerCertSecret: cert-manager-ingress-cert
+    maasIngressCertSecret: cert-manager-ingress-cert
 
   infrastructureApp:
     installPlanApproval: *installPlanApproval

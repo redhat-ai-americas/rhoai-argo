@@ -1,7 +1,8 @@
 global:
   clusterBaseUrl: ''
+  serviceCABundle: ''
 
 installPlanApproval: Manual
 rhclVersion: rhcl-operator.v1.3.4
 
-certManagerCertSecret: cert-manager-ingress-cert
+maasIngressCertSecret: cert-manager-ingress-cert
