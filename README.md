@@ -86,14 +86,13 @@ chmod +x build-cluster-application.sh && \
 ### For Demo Purposes Only
 
 > [!CAUTION]
-> The following script should only be used in demo environments to speed up cluster bootstrapping. It runs continuously in the background, watching for new InstallPlans. It automatically **approves first-time installations only** by checking the operator's Subscription status, ignoring any upgrades.
+> The following script should only be used in testing environments to speed up cluster bootstrapping. It runs continuously in the background, watching for new InstallPlans and can break your rhoai install. It automatically **approves first-time installations only** by checking the operator's Subscription status, ignoring any upgrades.
 
 ```bash
-declare -A seen; while read -r ns ip phase; do
-  [[ "$phase" == "RequiresApproval" && -z "${seen["$ns/$ip"]}" ]] && \
-  SUB=$(oc get sub -n "$ns" -o json | jq -r --arg IP "$ip" '[.items[] | select(.status.installplan.name==$IP) | .metadata.name][0]') && \
-  [[ -n "$SUB" && "$SUB" != "null" && -z "$(oc get sub "$SUB" -n "$ns" -o jsonpath='{.status.installedCSV}' 2>/dev/null)" ]] && \
-  echo "Approving: $ip in $ns" && oc patch installplan "$ip" -n "$ns" --type merge -p '{"spec":{"approved":true}}' && seen["$ns/$ip"]=1
+declare -A seen; while read -r ns ip ph; do [[ "$ph" == "RequiresApproval" && -z "${seen["$ns/$ip"]}" ]] && seen["$ns/$ip"]=1 && \
+  PKG=$(oc get sub -n "$ns" -o json | jq -r --arg IP "$ip" '[.items[] | select(.status.installplan.name==$IP) | .spec.name][0]') && \
+  [[ -n "$PKG" && "$PKG" != "null" ]] && ! oc get csv -n "$ns" -o name 2>/dev/null | grep -qiE "^csv/${PKG}\." && \
+  echo "Approving: $PKG in $ns" && oc patch installplan "$ip" -n "$ns" --type merge -p '{"spec":{"approved":true}}'
 done < <(oc get installplan -A -w --no-headers -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase)
 
 ```
