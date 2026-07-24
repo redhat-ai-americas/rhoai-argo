@@ -28,9 +28,10 @@ chmod +x hardware-profile/scripts/*.sh
 ```
 
 **1. [OPTIONAL] Provision gpu machineset:**
+This command accepts a type of instance to request, if you want something other than the AWS default "g6e.4xlarge", you can change the parameter below. (ex. Standard_NC4as_T4_v3, Standard_NC8as_T4_v3, Standard_NC6s_v3)
 
 ```bash
-./hardware-profile/scripts/add-gpu-machineset.sh
+./hardware-profile/scripts/add-gpu-machineset.sh -t g6e.4xlarge
 ```
 
 **2. [OPTIONAL] NVIDIA DGCM Dashboard:**

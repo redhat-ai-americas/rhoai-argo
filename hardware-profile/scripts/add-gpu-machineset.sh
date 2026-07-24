@@ -1,8 +1,19 @@
 #!/bin/bash
 set -e
 
+# Default values
 INSTANCE_TYPE="g6e.4xlarge"
 REPLICAS=1
+
+# Parse command-line parameters
+while getopts "t:r:h" opt; do
+  case $opt in
+    t) INSTANCE_TYPE="$OPTARG" ;;
+    r) REPLICAS="$OPTARG" ;;
+    h) echo "Usage: $0 [-t instance_type] [-r replicas]"; exit 0 ;;
+    \?) echo "Invalid option -$OPTARG" >&2; exit 1 ;;
+  esac
+done
 
 echo "🔍 Finding an existing worker MachineSet..."
 # Grab the first worker machineset by name to use as our template
@@ -24,6 +35,7 @@ oc get machineset "$SOURCE_MS" -n openshift-machine-api -o json > /tmp/source-ms
 echo "⚙️ Injecting $INSTANCE_TYPE, labels, and taints..."
 
 # Use jq to strip cluster-specific metadata and inject our GPU requirements
+# We check for instanceType (AWS), vmSize (Azure), and machineType (GCP)
 jq --arg NAME "$NEW_NAME" \
    --arg INSTANCE "$INSTANCE_TYPE" \
    --argjson REPLICAS "$REPLICAS" \
@@ -37,8 +49,13 @@ jq --arg NAME "$NEW_NAME" \
    .spec.selector.matchLabels["machine.openshift.io/cluster-api-machineset"] = $NAME |
    .spec.template.metadata.labels["machine.openshift.io/cluster-api-machineset"] = $NAME |
    
-   # 3. Inject the GPU AWS Instance Type
-   .spec.template.spec.providerSpec.value.instanceType = $INSTANCE |
+   # 3. Inject the GPU Instance Type dynamically based on the Cloud Provider
+   (.spec.template.spec.providerSpec.value | 
+      (if has("instanceType") then .instanceType = $INSTANCE else . end) | 
+      (if has("vmSize") then .vmSize = $INSTANCE else . end) |
+      (if has("machineType") then .machineType = $INSTANCE else . end)
+   ) as $new_provider |
+   .spec.template.spec.providerSpec.value = $new_provider |
    
    # 4. Add Node Labels for OpenShift AI and your custom GPU Role
    .spec.template.spec.metadata.labels["node-role.kubernetes.io/worker"] = "" |
