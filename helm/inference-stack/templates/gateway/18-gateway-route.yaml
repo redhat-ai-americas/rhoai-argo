@@ -18,5 +18,5 @@ spec:
     termination: reencrypt
     insecureEdgeTerminationPolicy: Redirect
     destinationCACertificate: |
-{{ .Values.global.serviceCABundle | nindent 6 }}
+{{ .Values.global.serviceCABundle | trim | indent 6 }}
 {{- end }}
