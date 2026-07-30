@@ -37,6 +37,9 @@ configuration:
     installPlanApproval: *installPlanApproval
     rhclVersion: rhcl-operator.v1.3.4
     maasIngressCertSecret: cert-manager-ingress-cert
+    maasRoute: false
+    maasRouteConfig:
+      termination: passthrough
 
   infrastructureApp:
     installPlanApproval: *installPlanApproval

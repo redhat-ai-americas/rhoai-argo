@@ -19,6 +19,7 @@ data:
                 requests:
                   cpu: 100m
                   memory: 256Mi
+{{- if .Values.maasUseRoute }}
   service: |
     metadata:
       annotations:
@@ -29,3 +30,4 @@ data:
       # ClusterIP avoids provisioning an external LoadBalancer; the OpenShift Route
       # handles external ingress instead.
       type: ClusterIP
+{{- end }}

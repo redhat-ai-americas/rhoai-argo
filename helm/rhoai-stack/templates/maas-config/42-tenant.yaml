@@ -1,0 +1,18 @@
+{{- if not (or (eq .Values.maas "Removed") .Values.externalDatabase) }}
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: Tenant
+metadata:
+  name: default-tenant
+  namespace: models-as-a-service
+  annotations:
+    argocd.argoproj.io/sync-wave: "42"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true,ServerSideApply=true
+spec:
+  telemetry:
+    enabled: true
+    metrics:
+      captureOrganization: true
+      captureUser: false
+      captureGroup: false
+      captureModelUsage: true
+{{- end }}
