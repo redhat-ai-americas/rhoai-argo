@@ -1,4 +1,4 @@
-{{- if and .Values.global.clusterBaseUrl .Values.global.serviceCABundle }}
+{{- if and .Values.global.serviceCABundle .Values.maasUseRoute }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -15,8 +15,10 @@ spec:
   port:
     targetPort: 443
   tls:
-    termination: reencrypt
+    termination: {{ .Values.maasRouteConfig.termination }}
     insecureEdgeTerminationPolicy: Redirect
+{{- if .Values.global.serviceCABundle }}
     destinationCACertificate: |
 {{ .Values.global.serviceCABundle | nindent 6 }}
+{{- end }}
 {{- end }}
