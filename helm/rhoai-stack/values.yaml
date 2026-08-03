@@ -59,7 +59,6 @@ userGroups:
 dashboardConfig:
   genAiStudio: true
   modelAsService: true
-  mlflow: true
 
 defaultWorkbenchPvcSize: 20Gi
 showJupyterInEnabledApplications: true
