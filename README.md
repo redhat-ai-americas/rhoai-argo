@@ -64,7 +64,8 @@ oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
 ```bash
 oc apply -f app-of-apps.yaml
 ```
-
+> [!TIP]
+> If you are using RedHat Demo Platform, make sure to scale your cluster's cpu machineset to at least 1 machine.
 ---
 
 ### Approve InstallPlans
