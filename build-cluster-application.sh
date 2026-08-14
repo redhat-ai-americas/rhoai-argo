@@ -18,8 +18,6 @@ yq -i ".spec.source.helm.valuesObject.global.clusterBaseUrl = \"$BASE_URL\"" "$N
 
 MAAS_ROUTE=$(yq '.spec.source.helm.valuesObject.configuration.inferenceApp.maasRoute // "false"' "$NEWFILE")
 MAAS_ROUTE_TERMINATION=$(yq '.spec.source.helm.valuesObject.configuration.inferenceApp.maasRouteConfig.termination // "passthrough"' "$NEWFILE")
-echo $MAAS_ROUTE
-echo $MAAS_ROUTE_TERMINATION
 if [[ $MAAS_ROUTE == "true" && $MAAS_ROUTE_TERMINATION == "reencrypt" ]]
 then
   echo "Using routes with reencryption requires the cert to be set. Doing that now"
@@ -36,4 +34,4 @@ then
   rm -f "$SERVICE_CA_FILE"
 fi
 
-#oc apply -f $NEWFILE
+oc apply -f $NEWFILE
