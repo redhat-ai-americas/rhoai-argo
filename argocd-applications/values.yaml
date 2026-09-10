@@ -35,7 +35,7 @@ configuration:
 
   inferenceApp:
     installPlanApproval: *installPlanApproval
-    rhclVersion: rhcl-operator.v1.3.4
+    rhclVersion: rhcl-operator.v1.4.2
     maasIngressCertSecret: cert-manager-ingress-cert
     maasRoute: false
     maasRouteConfig:
@@ -46,9 +46,12 @@ configuration:
 
   observabilityApp:
     installPlanApproval: *installPlanApproval
-    cooVersion: cluster-observability-operator.v1.4.0
+    cooVersion: cluster-observability-operator.v1.5.2
 
   rhoaiApp:
+    rhoaiChannel: "stable-3.5"
+    rhoaiVersion: "rhods-operator.3.5.0"
+
     externalDatabase: *externalDatabase
     installPlanApproval: Manual
 
@@ -125,3 +128,5 @@ configuration:
     installPlanApproval: *installPlanApproval
     kueue: *kueue
     trainer: *trainer
+    kueueChannel: stable-v1.4
+    kueueVersion: kueue-operator.v1.4.1

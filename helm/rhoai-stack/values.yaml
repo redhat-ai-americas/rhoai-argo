@@ -3,8 +3,8 @@ global:
 
 installPlanApproval: Manual
 
-rhoaiChannel: "stable-3.4"
-rhoaiVersion: "rhods-operator.3.4.2"
+rhoaiChannel: "stable-3.5"
+rhoaiVersion: "rhods-operator.3.5.0"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
@@ -20,8 +20,12 @@ dataScienceClusterInitialization:
     namespace: redhat-ods-monitoring
     metrics:
       storage:
-        size: 5Gi
-        retention: 1d
+        size: 50Gi
+        retention: 90d
+    traces:
+      storage:
+        backend: pv
+        retention: 2160h
 
 dataScienceCluster:
   create: true
@@ -29,10 +33,12 @@ dataScienceCluster:
   components:
     sparkoperator:
       managementState: *spark
-    kserve:
+    aigateway:
       managementState: Managed
       modelsAsService:
         managementState: *maas
+    kserve:
+      managementState: Managed
       nim:
         managementState: Managed
       rawDeploymentServiceConfig: Headed
@@ -64,7 +70,7 @@ dataScienceCluster:
       managementState: *trainer
     trainingoperator:
       managementState: Removed
-    llamastackoperator:
+    ogx:
       managementState: Managed
 
 userGroups:

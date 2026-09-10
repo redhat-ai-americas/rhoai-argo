@@ -1,6 +1,6 @@
 {{- if not (or (eq .Values.maas "Removed") .Values.externalDatabase) }}
 apiVersion: maas.opendatahub.io/v1alpha1
-kind: Tenant
+kind: MaasTenantConfig
 metadata:
   name: default-tenant
   namespace: models-as-a-service
@@ -12,7 +12,7 @@ spec:
     enabled: true
     metrics:
       captureOrganization: true
-      captureUser: false
+      captureUser: true
       captureGroup: false
       captureModelUsage: true
 {{- end }}

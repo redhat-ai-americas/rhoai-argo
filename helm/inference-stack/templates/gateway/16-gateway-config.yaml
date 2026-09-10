@@ -19,7 +19,7 @@ data:
                 requests:
                   cpu: 100m
                   memory: 256Mi
-{{- if .Values.maasUseRoute }}
+{{- if .Values.maasRoute }}
   service: |
     metadata:
       annotations:

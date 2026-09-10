@@ -2,3 +2,6 @@ installPlanApproval: Manual
 
 kueue: Unmanaged
 trainer: Managed
+
+kueueChannel: stable-v1.4
+kueueVersion: kueue-operator.v1.4.1
