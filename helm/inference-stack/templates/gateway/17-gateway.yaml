@@ -10,7 +10,7 @@ metadata:
   name: maas-default-gateway
   namespace: openshift-ingress
 spec:
-  gatewayClassName: openshift-default
+  gatewayClassName: data-science-gateway-class
   infrastructure:
     parametersRef:
       group: ''

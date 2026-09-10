@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: authorino-authorino-authorization
-  namespace: openshift-connectivity-link
+  namespace: kuadrant-system
   annotations:
     service.beta.openshift.io/serving-cert-secret-name: authorino-server-cert
     argocd.argoproj.io/sync-options: ServerSideApply=true
