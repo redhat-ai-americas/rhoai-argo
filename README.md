@@ -118,14 +118,14 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='https://{.
 > **Required: Reset the Kuadrant Operator** > Once the deployments are healthy manually kill the Kuadrant Operator Controller Pod. This forces the operator to recognize and load all of the newly applied MaaS configuration.
 > **Via the OpenShift Console:**
 > 1. Navigate to **Workloads > Pods**.
-> 2. Select the **openshift-connectivity-link** project from the namespace dropdown.
+> 2. Select the **kuadrant-system** project from the namespace dropdown.
 > 3. Locate the pod starting with `kuadrant-operator-controller-manager...`.
 > 4. Click the options menu (⋮) on the right and select **Delete Pod**.
 > 
 > 
 > **Via the CLI:**
 > ```bash
-> oc delete pod $(oc get pods -n openshift-connectivity-link | grep kuadrant-operator-controller | awk '{print $1}') -n openshift-connectivity-link
+> oc delete pod $(oc get pods -n kuadrant-system | grep kuadrant-operator-controller | awk '{print $1}') -n kuadrant-system
 > 
 > ```
 > 
