@@ -35,7 +35,7 @@ dataScienceCluster:
       managementState: *spark
     aigateway:
       managementState: Managed
-      modelsAsService:
+      modelsAsAService:
         managementState: *maas
     kserve:
       managementState: Managed

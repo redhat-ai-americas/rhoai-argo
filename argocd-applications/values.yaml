@@ -73,13 +73,15 @@ configuration:
       components:
         sparkoperator:
           managementState: *spark
+        aigateway:
+          managementState: Managed
+          modelsAsAService:
+            managementState: *maas
         kserve:
           managementState: Managed
           nim:
             managementState: Managed
           rawDeploymentServiceConfig: Headed
-          modelsAsService:
-            managementState: *maas
         modelregistry:
           managementState: Managed
           registriesNamespace: rhoai-model-registries
@@ -108,7 +110,7 @@ configuration:
           managementState: *trainer
         trainingoperator:
           managementState: Removed
-        llamastackoperator:
+        ogx:
           managementState: Managed
 
     userGroups:
