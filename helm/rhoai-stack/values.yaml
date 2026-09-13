@@ -25,7 +25,7 @@ dataScienceClusterInitialization:
     traces:
       storage:
         backend: pv
-        retention: 2160h
+        retention: 2160h0m0s
 
 dataScienceCluster:
   create: true

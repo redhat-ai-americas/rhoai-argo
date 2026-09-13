@@ -64,8 +64,12 @@ configuration:
         namespace: redhat-ods-monitoring
         metrics:
           storage:
-            size: 5Gi
-            retention: 1d
+            size: 50Gi
+            retention: 90d
+        traces:
+          storage:
+            backend: pv
+            retention: 2160h0m0s
 
     dataScienceCluster:
       create: true
