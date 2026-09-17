@@ -35,7 +35,7 @@ configuration:
 
   inferenceApp:
     installPlanApproval: *installPlanApproval
-    rhclVersion: rhcl-operator.v1.4.2
+    rhclVersion: rhcl-operator.v1.4.3
     maasIngressCertSecret: cert-manager-ingress-cert
     maasRoute: false
     maasRouteConfig:
