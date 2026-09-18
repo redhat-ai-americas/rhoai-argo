@@ -23,10 +23,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "5"
 spec:
   channel: stable
-  installPlanApproval: {{ .Values.installPlanApproval | default "Manual" }}
-  {{- if .Values.rhclVersion }}
-  startingCSV: {{ .Values.rhclVersion }}
-  {{- end }}
+  installPlanApproval: Manual
+  startingCSV: rhcl-operator.v1.4.3
   name: rhcl-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
