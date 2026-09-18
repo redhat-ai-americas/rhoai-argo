@@ -31,5 +31,5 @@ spec:
   name: kueue-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: kueue-operator.v1.4.0
+  startingCSV: kueue-operator.v1.4.2
 {{- end }}
