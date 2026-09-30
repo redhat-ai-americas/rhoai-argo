@@ -15,6 +15,12 @@ spec:
           clusterBaseUrl: ''
           serviceCABundle: ''
         installPlanApproval: Manual
+        enableGpuApp: true
+        enableInferenceApp: true
+        enableInfrastructureApp: true
+        enableObservabilityApp: true
+        enableRhoaiApp: true
+        enableWorkloadScalingApp: true
         enableSelfSignedCerts: true
         externalDatabase: &externalDatabase false
         configuration:
