@@ -16,7 +16,7 @@ spec:
   source:
     path: helm/inference-stack
     repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: maas
+    targetRevision: maas-20260930
     helm:
       valuesObject:
         global:
