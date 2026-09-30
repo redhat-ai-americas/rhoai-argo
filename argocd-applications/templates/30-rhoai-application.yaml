@@ -18,6 +18,7 @@ spec:
       valuesObject:
         global:
           {{- .Values.global | toYaml | nindent 10 }}
+        enableObservabilityApp: {{ .Values.enableObservabilityApp }}
         {{- .Values.configuration.rhoaiApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:
