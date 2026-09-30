@@ -1,4 +1,4 @@
-{{- if or (not .Values.enableDatabaseManager) .Values.addSelfSignedCerts }}
+{{- if or (not .Values.externalDatabase) .Values.addSelfSignedCerts }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
