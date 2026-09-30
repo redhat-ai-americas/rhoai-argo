@@ -16,13 +16,16 @@ enableInfrastructureApp: true
 enableObservabilityApp: true
 enableRhoaiApp: true
 enableWorkloadScalingApp: true
-addSelfSignedCerts: false
+enableSelfSignedCerts: false
 
 configuration:
   databaseApp:
     installPlanApproval: *installPlanApproval
     maasDb:
       enableMaas: *maas
+      certificateIssuer:
+        name: ca-issuer
+        kind: ClusterIssuer
       storage:
         size: 2Gi
 
@@ -129,7 +132,7 @@ configuration:
     defaultWorkbenchPvcSize: 20Gi
     showJupyterInEnabledApplications: true
 
-  selfSignedCerts: {}
+  selfSignedCertsApp: {}
 
   workloadScalingApp:
     installPlanApproval: *installPlanApproval

@@ -1,4 +1,7 @@
-{{- if or (not .Values.externalDatabase) .Values.addSelfSignedCerts }}
+{{- if hasKey .Values "addSelfSignedCerts" }}
+{{- fail "addSelfSignedCerts was renamed to enableSelfSignedCerts" }}
+{{- end }}
+{{- if .Values.enableSelfSignedCerts }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -18,8 +21,8 @@ spec:
       valuesObject:
         global:
           {{- .Values.global | toYaml | nindent 10 -}}
-{{- if .Values.configuration.selfSignedCerts -}}
-{{- .Values.configuration.selfSignedCerts | toYaml | nindent 8 }}
+{{- if .Values.configuration.selfSignedCertsApp -}}
+{{- .Values.configuration.selfSignedCertsApp | toYaml | nindent 8 }}
 {{- end }}
   project: default
   syncPolicy:

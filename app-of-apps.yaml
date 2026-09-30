@@ -15,7 +15,7 @@ spec:
           clusterBaseUrl: ''
           serviceCABundle: ''
         installPlanApproval: Manual
-        addSelfSignedCerts: true
+        enableSelfSignedCerts: true
         externalDatabase: &externalDatabase false
         configuration:
           inferenceApp:
