@@ -42,6 +42,8 @@ dataScienceCluster:
       nim:
         managementState: Managed
       rawDeploymentServiceConfig: Headed
+      modelsAsService:
+        managementState: Managed
     modelregistry:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
@@ -80,6 +82,7 @@ dashboardConfig:
   genAiStudio: true
   modelAsService: true
   observabilityDashboard: true
+  automl: true
 
 defaultWorkbenchPvcSize: 20Gi
 showJupyterInEnabledApplications: true

@@ -124,6 +124,7 @@ configuration:
       genAiStudio: true
       modelAsService: true
       observabilityDashboard: true
+      automl: true
 
     defaultWorkbenchPvcSize: 20Gi
     showJupyterInEnabledApplications: true

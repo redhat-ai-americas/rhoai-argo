@@ -20,17 +20,14 @@ spec:
         configuration:
           inferenceApp:
             maasIngressCertSecret: cert-manager-ingress-cert
-            rhclVersion: rhcl-operator.v1.3.4
+            rhclVersion: rhcl-operator.v1.4.3
+            maasRoute: true
           gpuApp:
-            nvidiaGpuChannel: "v25.10"
-            nvidiaGpuVersion: 'gpu-operator-certified.v25.10.1'
-            nvidiaGpuDriverVersion: 580.126.20
+            nvidiaGpuChannel: "stable"
+            nvidiaGpuVersion: 'gpu-operator-certified.v26.7.0'
+            nvidiaGpuDriverVersion: 615.71.09
           rhoaiApp:
             externalDatabase: *externalDatabase
-            rhoaiChannel: "stable-3.4"
-            rhoaiVersion: "rhods-operator.3.4.3"
-          observabilityApp:
-            cooVersion: cluster-observability-operator.v1.4.0
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops
