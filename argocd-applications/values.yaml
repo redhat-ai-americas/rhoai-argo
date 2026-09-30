@@ -16,7 +16,7 @@ enableInfrastructureApp: true
 enableObservabilityApp: true
 enableRhoaiApp: true
 enableWorkloadScalingApp: true
-enableSelfSignedCerts: false
+enableSelfSignedCertsApp: false
 
 configuration:
   databaseApp:

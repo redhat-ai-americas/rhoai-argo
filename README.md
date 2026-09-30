@@ -80,8 +80,8 @@ chmod +x build-cluster-application.sh && \
 
 ### Certificates
 
-* `enableSelfSignedCerts` (default `false`) installs a self-signed CA along with the `selfsigned-issuer` and `ca-issuer` ClusterIssuers. Leave it disabled on clusters that already have cert-manager issuers configured.
-* The in-cluster MaaS database (`externalDatabase: false`) requests its certificate from `configuration.databaseApp.maasDb.certificateIssuer` (default `ca-issuer`). If `enableSelfSignedCerts` is `false`, point this at an existing issuer.
+* `enableSelfSignedCertsApp` (default `false`) installs a self-signed CA along with the `selfsigned-issuer` and `ca-issuer` ClusterIssuers. Leave it disabled on clusters that already have cert-manager issuers configured.
+* The in-cluster MaaS database (`externalDatabase: false`) requests its certificate from `configuration.databaseApp.maasDb.certificateIssuer` (default `ca-issuer`). If `enableSelfSignedCertsApp` is `false`, point this at an existing issuer.
 ---
 
 ### Approve InstallPlans

@@ -1,7 +1,7 @@
 {{- if hasKey .Values "addSelfSignedCerts" }}
-{{- fail "addSelfSignedCerts was renamed to enableSelfSignedCerts" }}
+{{- fail "addSelfSignedCerts was renamed to enableSelfSignedCertsApp" }}
 {{- end }}
-{{- if .Values.enableSelfSignedCerts }}
+{{- if .Values.enableSelfSignedCertsApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

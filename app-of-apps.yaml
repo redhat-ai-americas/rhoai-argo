@@ -21,7 +21,7 @@ spec:
         enableObservabilityApp: true
         enableRhoaiApp: true
         enableWorkloadScalingApp: true
-        enableSelfSignedCerts: true
+        enableSelfSignedCertsApp: true
         externalDatabase: &externalDatabase false
         configuration:
           inferenceApp:
