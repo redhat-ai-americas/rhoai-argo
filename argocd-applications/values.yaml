@@ -50,7 +50,7 @@ configuration:
 
   rhoaiApp:
     rhoaiChannel: "stable-3.5"
-    rhoaiVersion: "rhods-operator.3.5.0"
+    rhoaiVersion: "rhods-operator.3.5.1"
 
     externalDatabase: *externalDatabase
     installPlanApproval: Manual
