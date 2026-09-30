@@ -73,6 +73,8 @@ chmod +x build-cluster-application.sh && \
 ### Feature Flags
 
 * Each application is controlled by a top-level `enable*` flag in `app-of-apps.yaml` (e.g. `enableGpuApp`). Flags sit directly under `valuesObject`, not under `configuration` or `global`, and any flag left out defaults to `true`.
+* `enableObservabilityApp` installs the observability operators and user workload monitoring, and sets the RHOAI `DSCInitialization` `monitoring.managementState` to `Managed` (or `Removed` when `false`, which also drops the metrics/traces storage and disables MaaS tenant telemetry). `monitoring.managementState` cannot be set independently.
+* `enableInferenceApp` requires `enableObservabilityApp`.
 * Flags must be unquoted booleans. A quoted `"false"` is a non-empty string, which Helm treats as `true`.
 * Disabling a flag after the first sync does not uninstall anything. The app-of-apps does not prune, so the child Application stays (OutOfSync), and deleting it leaves its operators and resources on the cluster. Remove those manually.
 

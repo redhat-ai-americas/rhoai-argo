@@ -7,5 +7,15 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "31"
 spec:
-  {{- toYaml . | nindent 2 }}
+  monitoring:
+    namespace: {{ .monitoring.namespace }}
+    {{- if $.Values.enableObservabilityApp }}
+    managementState: Managed
+    metrics:
+      {{- toYaml .monitoring.metrics | nindent 6 }}
+    traces:
+      {{- toYaml .monitoring.traces | nindent 6 }}
+    {{- else }}
+    managementState: Removed
+    {{- end }}
 {{- end }}

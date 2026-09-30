@@ -9,7 +9,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true,ServerSideApply=true
 spec:
   telemetry:
-    enabled: true
+    enabled: {{ .Values.enableObservabilityApp }}
     metrics:
       captureOrganization: true
       captureUser: true

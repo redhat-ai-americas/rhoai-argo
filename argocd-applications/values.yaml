@@ -62,8 +62,11 @@ configuration:
     dashboardReplicas: 1
 
     dataScienceClusterInitialization:
+      # managementState is intentionally omitted. It is set from the top-level
+      # enableObservabilityApp flag (Managed when true, Removed when false) in
+      # helm/rhoai-stack/templates/configs/31-datascienceclusterinitialization.yaml.
+      # That template only renders namespace, metrics, and traces from this block.
       monitoring:
-        managementState: Managed
         namespace: redhat-ods-monitoring
         metrics:
           storage:
