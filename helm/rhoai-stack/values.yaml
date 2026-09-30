@@ -4,19 +4,23 @@ global:
 installPlanApproval: Manual
 
 rhoaiChannel: "stable-3.5"
-rhoaiVersion: "rhods-operator.3.5.0"
+rhoaiVersion: "rhods-operator.3.5.1"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
 maas: &maas "Managed"
 externalDatabase: true
+enableObservabilityApp: true
 
 operatorReplicas: 1
 dashboardReplicas: 1
 
 dataScienceClusterInitialization:
+  # managementState is intentionally omitted. It is set from enableObservabilityApp
+  # (Managed when true, Removed when false) in
+  # templates/configs/31-datascienceclusterinitialization.yaml.
+  # That template only renders namespace, metrics, and traces from this block.
   monitoring:
-    managementState: Managed
     namespace: redhat-ods-monitoring
     metrics:
       storage:
