@@ -24,8 +24,8 @@ spec:
     namespace: openshift-gitops
   source:
     path: helm/inference-stack
-    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: maas
+    repoURL: {{ required "git.repoURL is required" .Values.git.repoURL }}
+    targetRevision: {{ required "git.targetRevision is required" .Values.git.targetRevision }}
     helm:
       valuesObject:
         global:

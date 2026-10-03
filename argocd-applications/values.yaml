@@ -3,6 +3,14 @@ global:
   clusterBaseUrl: ''
   serviceCABundle: ''
 
+# Repo and revision for the child Applications. These are defaults for local
+# renders; the app-of-apps overrides them with its own spec.source through Argo
+# CD build environment variables, so they only need to be changed in
+# app-of-apps.yaml.
+git:
+  repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+  targetRevision: maas
+
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"

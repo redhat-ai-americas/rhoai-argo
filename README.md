@@ -70,6 +70,11 @@ chmod +x build-cluster-application.sh && \
 ./build-cluster-application.sh app-of-apps.yaml
 ```
 
+### Repository and Branch
+
+* Set the Git repo and branch only in `app-of-apps.yaml` (`spec.source.repoURL` and `spec.source.targetRevision`). The app-of-apps passes them to every child Application through Argo CD's `$ARGOCD_APP_SOURCE_REPO_URL` and `$ARGOCD_APP_SOURCE_TARGET_REVISION` build environment variables, as the `git.repoURL` and `git.targetRevision` Helm parameters.
+* Local renders of `argocd-applications` fall back to the defaults in `argocd-applications/values.yaml`. Override them with `--set git.repoURL=<url> --set git.targetRevision=<branch>`.
+
 ### Feature Flags
 
 * Each application is controlled by a top-level `enable*` flag in `app-of-apps.yaml` (e.g. `enableGpuApp`). Flags sit directly under `valuesObject`, not under `configuration` or `global`, and any flag left out defaults to `true`.

@@ -10,6 +10,12 @@ spec:
     path: argocd-applications
     targetRevision: maas
     helm:
+      # Child Applications use the same repo and revision as this one.
+      parameters:
+        - name: git.repoURL
+          value: $ARGOCD_APP_SOURCE_REPO_URL
+        - name: git.targetRevision
+          value: $ARGOCD_APP_SOURCE_TARGET_REVISION
       valuesObject:
         global:
           clusterBaseUrl: ''
