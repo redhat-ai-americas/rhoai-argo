@@ -1,4 +1,13 @@
-{{- if not .Values.externalDatabase }}
+{{- if hasKey .Values "externalDatabase" }}
+{{- fail "externalDatabase was replaced by enableDatabaseApp" }}
+{{- end }}
+{{- if hasKey .Values.configuration.rhoaiApp "externalDatabase" }}
+{{- fail "configuration.rhoaiApp.externalDatabase was replaced by enableDatabaseApp" }}
+{{- end }}
+{{- if hasKey .Values.configuration.databaseApp "maasDb" }}
+{{- fail "configuration.databaseApp.maasDb moved to configuration.maasApp.maasDb" }}
+{{- end }}
+{{- if .Values.enableDatabaseApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,8 +21,8 @@ spec:
     namespace: openshift-gitops
   source:
     path: helm/database-stack
-    repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
-    targetRevision: maas
+    repoURL: {{ required "git.repoURL is required" .Values.git.repoURL }}
+    targetRevision: {{ required "git.targetRevision is required" .Values.git.targetRevision }}
     helm:
       valuesObject:
         global:

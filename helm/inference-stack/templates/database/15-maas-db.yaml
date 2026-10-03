@@ -1,4 +1,3 @@
-{{- if not (eq .Values.maasDb.enableMaas "Removed") }}
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -34,4 +33,3 @@ spec:
   storage:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- end }}

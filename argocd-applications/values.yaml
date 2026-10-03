@@ -3,15 +3,22 @@ global:
   clusterBaseUrl: ''
   serviceCABundle: ''
 
+# Repo and revision for the child Applications. These are defaults for local
+# renders; the app-of-apps overrides them with its own spec.source through Argo
+# CD build environment variables, so they only need to be changed in
+# app-of-apps.yaml.
+git:
+  repoURL: https://github.com/redhat-ai-americas/rhoai-argo.git
+  targetRevision: maas
+
 installPlanApproval: &installPlanApproval Manual
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Managed"
-maas: &maas "Managed"
-externalDatabase: &externalDatabase true
 
+enableDatabaseApp: true
 enableGpuApp: true
-enableInferenceApp: true
+enableMaasApp: true
 enableInfrastructureApp: true
 enableObservabilityApp: true
 enableRhoaiApp: true
@@ -21,13 +28,6 @@ enableSelfSignedCertsApp: false
 configuration:
   databaseApp:
     installPlanApproval: *installPlanApproval
-    maasDb:
-      enableMaas: *maas
-      certificateIssuer:
-        name: ca-issuer
-        kind: ClusterIssuer
-      storage:
-        size: 2Gi
 
   gpuApp:
     installPlanApproval: *installPlanApproval
@@ -36,13 +36,19 @@ configuration:
     nvidiaGpuVersion: 'gpu-operator-certified.v25.3.0'
     nvidiaGpuDriverVersion: 575.57.08
 
-  inferenceApp:
+  maasApp:
     installPlanApproval: *installPlanApproval
     rhclVersion: rhcl-operator.v1.4.3
     maasIngressCertSecret: cert-manager-ingress-cert
     maasRoute: false
     maasRouteConfig:
       termination: passthrough
+    maasDb:
+      certificateIssuer:
+        name: ca-issuer
+        kind: ClusterIssuer
+      storage:
+        size: 2Gi
 
   infrastructureApp:
     installPlanApproval: *installPlanApproval
@@ -55,7 +61,6 @@ configuration:
     rhoaiChannel: "stable-3.5"
     rhoaiVersion: "rhods-operator.3.5.1"
 
-    externalDatabase: *externalDatabase
     installPlanApproval: Manual
 
     operatorReplicas: 1
@@ -83,14 +88,15 @@ configuration:
       components:
         sparkoperator:
           managementState: *spark
+        # aigateway.modelsAsAService is intentionally omitted. It is set from the
+        # top-level enableMaasApp flag, and the deprecated kserve.modelsAsService is
+        # always Removed, in helm/rhoai-stack/templates/configs/33-datasciencecluster.yaml.
         aigateway:
           managementState: Managed
-          modelsAsAService:
-            managementState: *maas
         kserve:
           managementState: Managed
           nim:
-            managementState: Managed
+            managementState: Removed
           rawDeploymentServiceConfig: Headed
         modelregistry:
           managementState: Managed
@@ -126,10 +132,11 @@ configuration:
     userGroups:
       - system:authenticated
 
+    # modelAsService and observabilityDashboard are intentionally omitted. They are
+    # set from enableMaasApp and enableObservabilityApp in
+    # helm/rhoai-stack/templates/configs/35-odhdashboardconfig.yaml.
     dashboardConfig:
       genAiStudio: true
-      modelAsService: true
-      observabilityDashboard: true
       automl: true
 
     defaultWorkbenchPvcSize: 20Gi
