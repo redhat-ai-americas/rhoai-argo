@@ -34,4 +34,3 @@ then
   rm -f "$SERVICE_CA_FILE"
 fi
 
-oc apply -f $NEWFILE
