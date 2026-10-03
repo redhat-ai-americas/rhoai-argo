@@ -1,4 +1,13 @@
-{{- if not .Values.externalDatabase }}
+{{- if hasKey .Values "externalDatabase" }}
+{{- fail "externalDatabase was replaced by enableDatabaseApp" }}
+{{- end }}
+{{- if hasKey .Values.configuration.rhoaiApp "externalDatabase" }}
+{{- fail "configuration.rhoaiApp.externalDatabase was replaced by enableDatabaseApp" }}
+{{- end }}
+{{- if hasKey .Values.configuration.databaseApp "maasDb" }}
+{{- fail "configuration.databaseApp.maasDb moved to configuration.maasApp.maasDb" }}
+{{- end }}
+{{- if .Values.enableDatabaseApp }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

@@ -9,3 +9,10 @@ maasIngressCertSecret: cert-manager-ingress-cert
 maasRoute: false
 maasRouteConfig:
   termination: passthrough
+
+maasDb:
+  certificateIssuer:
+    name: ca-issuer
+    kind: ClusterIssuer
+  storage:
+    size: 2Gi

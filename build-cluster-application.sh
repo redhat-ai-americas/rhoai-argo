@@ -16,8 +16,8 @@ echo "New file location is $NEWFILE"
 
 yq -i ".spec.source.helm.valuesObject.global.clusterBaseUrl = \"$BASE_URL\"" "$NEWFILE"
 
-MAAS_ROUTE=$(yq '.spec.source.helm.valuesObject.configuration.inferenceApp.maasRoute // "false"' "$NEWFILE")
-MAAS_ROUTE_TERMINATION=$(yq '.spec.source.helm.valuesObject.configuration.inferenceApp.maasRouteConfig.termination // "passthrough"' "$NEWFILE")
+MAAS_ROUTE=$(yq '.spec.source.helm.valuesObject.configuration.maasApp.maasRoute // "false"' "$NEWFILE")
+MAAS_ROUTE_TERMINATION=$(yq '.spec.source.helm.valuesObject.configuration.maasApp.maasRouteConfig.termination // "passthrough"' "$NEWFILE")
 if [[ $MAAS_ROUTE == "true" && $MAAS_ROUTE_TERMINATION == "reencrypt" ]]
 then
   echo "Using routes with reencryption requires the cert to be set. Doing that now"

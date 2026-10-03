@@ -19,6 +19,8 @@ spec:
         global:
           {{- .Values.global | toYaml | nindent 10 }}
         enableObservabilityApp: {{ .Values.enableObservabilityApp }}
+        enableMaasApp: {{ .Values.enableMaasApp }}
+        enableDatabaseApp: {{ .Values.enableDatabaseApp }}
         {{- .Values.configuration.rhoaiApp | toYaml | nindent 8 }}
   project: default
   syncPolicy:

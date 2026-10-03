@@ -15,16 +15,16 @@ spec:
           clusterBaseUrl: ''
           serviceCABundle: ''
         installPlanApproval: Manual
+        enableDatabaseApp: true
         enableGpuApp: true
-        enableInferenceApp: true
         enableInfrastructureApp: true
+        enableMaasApp: true
         enableObservabilityApp: true
         enableRhoaiApp: true
         enableWorkloadScalingApp: true
         enableSelfSignedCertsApp: true
-        externalDatabase: &externalDatabase false
         configuration:
-          inferenceApp:
+          maasApp:
             maasIngressCertSecret: cert-manager-ingress-cert
             rhclVersion: rhcl-operator.v1.4.3
             maasRoute: true
@@ -32,8 +32,6 @@ spec:
             nvidiaGpuChannel: "stable"
             nvidiaGpuVersion: 'gpu-operator-certified.v26.7.0'
             nvidiaGpuDriverVersion: 615.71.09
-          rhoaiApp:
-            externalDatabase: *externalDatabase
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops

@@ -73,15 +73,17 @@ chmod +x build-cluster-application.sh && \
 ### Feature Flags
 
 * Each application is controlled by a top-level `enable*` flag in `app-of-apps.yaml` (e.g. `enableGpuApp`). Flags sit directly under `valuesObject`, not under `configuration` or `global`, and any flag left out defaults to `true`.
-* `enableObservabilityApp` installs the observability operators and user workload monitoring, and sets the RHOAI `DSCInitialization` `monitoring.managementState` to `Managed` (or `Removed` when `false`, which also drops the metrics/traces storage and disables MaaS tenant telemetry). `monitoring.managementState` cannot be set independently.
-* `enableInferenceApp` requires `enableObservabilityApp`.
+* `enableObservabilityApp` installs the observability operators and user workload monitoring, and sets the RHOAI `DSCInitialization` `monitoring.managementState` to `Managed` (or `Removed` when `false`, which also drops the metrics/traces storage). `monitoring.managementState` cannot be set independently.
+* `enableObservabilityApp` also sets the dashboard's `observabilityDashboard` flag.
+* `enableMaasApp` installs the MaaS gateway stack (RHCL/Kuadrant, Authorino, LeaderWorkerSet, gateway and route), the MaaS PostgreSQL database (namespace `maas-db`, certificate and CloudNativePG `Cluster`), the wiring that connects MaaS to it, and the MaaS tenant config. It also sets the DSC `aigateway.modelsAsAService.managementState` and the dashboard's `modelAsService` flag. When `false`, MaaS is `Removed` in the DSC. The deprecated `kserve.modelsAsService` is always `Removed`. These cannot be set independently. `enableMaasApp` requires `enableObservabilityApp` and `enableDatabaseApp` (the render fails otherwise), and it replaces `enableInferenceApp`/`configuration.inferenceApp`, which now fail the render.
 * Flags must be unquoted booleans. A quoted `"false"` is a non-empty string, which Helm treats as `true`.
 * Disabling a flag after the first sync does not uninstall anything. The app-of-apps does not prune, so the child Application stays (OutOfSync), and deleting it leaves its operators and resources on the cluster. Remove those manually.
 
 ### Certificates
 
 * `enableSelfSignedCertsApp` (default `false`) installs a self-signed CA along with the `selfsigned-issuer` and `ca-issuer` ClusterIssuers. Leave it disabled on clusters that already have cert-manager issuers configured.
-* The in-cluster MaaS database (`externalDatabase: false`) requests its certificate from `configuration.databaseApp.maasDb.certificateIssuer` (default `ca-issuer`). If `enableSelfSignedCertsApp` is `false`, point this at an existing issuer.
+* `enableDatabaseApp` installs the CloudNativePG operator. It replaces `externalDatabase`, which now fails the render.
+* The MaaS database requests its certificate from `configuration.maasApp.maasDb.certificateIssuer` (default `ca-issuer`). If `enableSelfSignedCertsApp` is `false`, point this at an existing issuer.
 ---
 
 ### Approve InstallPlans
