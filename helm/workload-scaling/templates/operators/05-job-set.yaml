@@ -33,5 +33,5 @@ spec:
   name: job-set
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: jobset-operator.v1.0.0
+  startingCSV: jobset-operator.v1.0.1
 {{- end }}

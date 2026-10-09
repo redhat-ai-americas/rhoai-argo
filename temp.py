@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-connectivity-link
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: connectivity-link-group
+  namespace: openshift-connectivity-link
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec: {}
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: rhcl-operator
+  namespace: openshift-connectivity-link
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  installPlanApproval: "Manual"
+  startingCSV: rhcl-operator.v1.3.4
+  name: rhcl-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
