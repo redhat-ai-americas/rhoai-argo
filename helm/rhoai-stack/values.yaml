@@ -50,7 +50,7 @@ dataScienceCluster:
       managementState: *trainer
     trainingoperator:
       managementState: Removed
-    llamastackoperator:
+    ogx:
       managementState: Managed
 
 userGroups:
