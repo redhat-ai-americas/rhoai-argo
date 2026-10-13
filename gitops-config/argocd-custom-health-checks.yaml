@@ -1,11 +1,6 @@
-apiVersion: argoproj.io/v1beta1
-kind: ArgoCD
-metadata:
-  name: openshift-gitops
-  namespace: openshift-gitops
+# gitops-config/argocd-health-patch.yaml
 spec:
   resourceHealthChecks:
-    # This makes the Parent wait for the Child's status
     - group: argoproj.io
       kind: Application
       check: |
@@ -35,11 +30,3 @@ spec:
           hs.message = "Waiting for CSV"
         end
         return hs
----
-apiVersion: operator.openshift.io/v1
-kind: Console
-metadata:
-  name: cluster
-spec:
-  plugins:
-    - gitops-plugin

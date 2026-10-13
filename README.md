@@ -40,18 +40,13 @@ cd rhoai-argo
 - Checks if the OpenShift GitOps and cert-manager Subscriptions exists. If not, applies them and configures permissions for the gitops Service Account once the operator is **fully** ready.
 
 ```bash
-# 1. Install Operators (only if missing) & Permissions
-oc get subscription openshift-cert-manager-operator -n openshift-cert-manager-operator &>/dev/null || oc apply -f gitops-config/cert-manager-subscription.yaml
-oc get subscription openshift-gitops-operator -n openshift-operators &>/dev/null || oc apply -f gitops-config/openshift-gitops-subscription.yaml
-oc apply -f gitops-config/gitops-permission.yaml
+# 1. Install Operators (only if missing)
+oc get subscription openshift-cert-manager-operator -n cert-manager-operator &>/dev/null || oc apply -f gitops-config/cert-manager-subscription.yaml
+oc get subscription openshift-gitops-operator -n openshift-gitops-operator &>/dev/null || oc apply -f gitops-config/openshift-gitops-subscription.yaml
 
-echo "⏳ Finalizing OpenShift GitOps environment..."
-
-# 2. Silent Wait until the Deployment exists
-until oc wait deployment/openshift-gitops-server -n openshift-gitops --for=condition=Available --timeout=10s &>/dev/null; do sleep 5; done
-
-# 3. Apply custom health checks and enable the sidebar GitOps tab
-oc apply --server-side --force-conflicts -f gitops-config/argocd-instance.yaml
+# 2. Apply Permissions & Custom Health Checks (Safe to rerun, won't duplicate)
+oc get -f gitops-config/gitops-permission.yaml &>/dev/null || oc apply -f gitops-config/gitops-permission.yaml
+oc patch argocd openshift-gitops -n openshift-gitops --type=merge --patch-file gitops-config/argocd-custom-health-checks.yaml
 ```
 
 ---
