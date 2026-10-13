@@ -36,11 +36,12 @@ git clone https://github.com/redhat-ai-americas/rhoai-argo.git
 cd rhoai-argo
 ```
 
-### 1. Prepare OpenShift GitOps (~60 seconds)
-- Checks if the OpenShift GitOps Subscription exists. If not, applies it and configures permissions for the Service Account once the operator is **fully** ready.
+### 1. Prepare OpenShift GitOps & cert-manager (~60 seconds)
+- Checks if the OpenShift GitOps and cert-manager Subscriptions exists. If not, applies them and configures permissions for the gitops Service Account once the operator is **fully** ready.
 
 ```bash
-# 1. Install Operator (only if missing) & Permissions
+# 1. Install Operators (only if missing) & Permissions
+oc get subscription openshift-cert-manager-operator -n openshift-cert-manager-operator &>/dev/null || oc apply -f gitops-config/cert-manager-subscription.yaml
 oc get subscription openshift-gitops-operator -n openshift-operators &>/dev/null || oc apply -f gitops-config/openshift-gitops-subscription.yaml
 oc apply -f gitops-config/gitops-permission.yaml
 
