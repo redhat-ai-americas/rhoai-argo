@@ -1,3 +1,12 @@
+apiVersion: user.openshift.io/v1
+kind: Group
+metadata:
+  name: gitops-admins
+  namespace: openshift-gitops
+users:
+- admin
+- opentlc-mgr
+---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:

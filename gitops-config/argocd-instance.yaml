@@ -4,6 +4,12 @@ metadata:
   name: openshift-gitops
   namespace: openshift-gitops
 spec:
+  rbac:
+    defaultPolicy: ''
+    policy: |
+      g, system:cluster-admins, role:admin
+      g, gitops-admins, role:admin
+    scopes: '[groups]'
   resourceHealthChecks:
     # This makes the Parent wait for the Child's status
     - group: argoproj.io
