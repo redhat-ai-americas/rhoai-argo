@@ -12,9 +12,8 @@ metadata:
   namespace: redhat-ods-applications
 spec:
   dashboardConfig:
-    {{- with .Values.dashboardConfig }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- $flags := dict "modelAsService" .Values.enableMaasApp "observabilityDashboard" .Values.enableObservabilityApp }}
+    {{- toYaml (merge $flags (.Values.dashboardConfig | default dict)) | nindent 4 }}
   groupsConfig:
     adminGroups: rhods-admins
     allowedGroups: {{ join "," .Values.userGroups }}

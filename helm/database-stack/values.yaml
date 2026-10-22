@@ -1,9 +1,1 @@
 installPlanApproval: Manual
-
-maasDb:
-  enableMaas: Managed
-  certificateIssuer:
-    name: ca-issuer
-    kind: ClusterIssuer
-  storage:
-    size: 2Gi

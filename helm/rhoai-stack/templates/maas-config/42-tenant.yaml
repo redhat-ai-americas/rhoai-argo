@@ -1,4 +1,4 @@
-{{- if not (or (eq .Values.maas "Removed") .Values.externalDatabase) }}
+{{- if .Values.enableMaasApp }}
 apiVersion: maas.opendatahub.io/v1alpha1
 kind: MaasTenantConfig
 metadata:
