@@ -21,7 +21,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: openshift-gitops
   syncPolicy:
-    automated: {}
     syncOptions:
       - SkipDryRunOnMissingResource=true
       - RespectIgnoreDifferences=true
