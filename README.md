@@ -46,7 +46,7 @@ oc get subscription openshift-gitops-operator -n openshift-gitops-operator &>/de
 
 # 2. Apply Permissions & Custom Health Checks (Safe to rerun, won't duplicate)
 oc get -f gitops-config/gitops-permission.yaml &>/dev/null || oc apply -f gitops-config/gitops-permission.yaml
-oc patch argocd openshift-gitops -n openshift-gitops --type=merge --patch-file gitops-config/argocd-custom-health-checks.yaml
+until oc get argocd openshift-gitops -n openshift-gitops &>/dev/null; do sleep 3; done; oc patch argocd openshift-gitops -n openshift-gitops --type=merge --patch-file gitops-config/argocd-custom-health-checks.yaml
 ```
 
 ---
