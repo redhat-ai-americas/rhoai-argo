@@ -1,3 +1,4 @@
 *.DS_Store
 scratch/
 cluster-applications/
+teardown.log

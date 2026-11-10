@@ -1,4 +1,21 @@
+{{- if and .Values.enableMaasApp (not .Values.enableObservabilityApp) }}
+{{- fail "enableMaasApp requires enableObservabilityApp" }}
+{{- end }}
+{{- if and .Values.enableMaasApp (not .Values.enableDatabaseApp) }}
+{{- fail "enableMaasApp requires enableDatabaseApp" }}
+{{- end }}
 {{- if .Values.dataScienceCluster.create }}
+{{- $components := deepCopy (.Values.dataScienceCluster.components | default dict) }}
+{{- $aigateway := get $components "aigateway" | default dict }}
+{{- $_ := set $aigateway "modelsAsAService" (dict "managementState" (ternary "Managed" "Removed" .Values.enableMaasApp)) }}
+{{- $_ = set $components "aigateway" $aigateway }}
+{{- /*
+  kserve.modelsAsService is deprecated but still honored when Managed. MaaS is
+  configured only through aigateway.modelsAsAService, so this is always Removed.
+*/}}
+{{- if hasKey $components "kserve" }}
+{{- $_ = set (get $components "kserve") "modelsAsService" (dict "managementState" "Removed") }}
+{{- end }}
 ---
 apiVersion: datasciencecluster.opendatahub.io/v2
 kind: DataScienceCluster
@@ -8,11 +25,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "33"
   namespace: redhat-ods-applications
-{{- if .Values.dataScienceCluster.components }}
 spec:
   components:
-    {{- toYaml .Values.dataScienceCluster.components | nindent 4 }}
-{{- else }}
-spec: {}
-{{- end }}
+    {{- toYaml $components | nindent 4 }}
 {{- end }}

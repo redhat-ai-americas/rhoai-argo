@@ -8,9 +8,9 @@ rhoaiVersion: "rhods-operator.3.5.1"
 kueue: &kueue "Unmanaged"
 trainer: &trainer "Managed"
 spark: &spark "Removed"
-maas: &maas "Managed"
-externalDatabase: true
+enableDatabaseApp: true
 enableObservabilityApp: true
+enableMaasApp: true
 
 operatorReplicas: 1
 dashboardReplicas: 1
@@ -37,17 +37,16 @@ dataScienceCluster:
   components:
     sparkoperator:
       managementState: *spark
+    # aigateway.modelsAsAService is intentionally omitted. It is set from
+    # enableMaasApp, and the deprecated kserve.modelsAsService is always Removed, in
+    # templates/configs/33-datasciencecluster.yaml.
     aigateway:
       managementState: Managed
-      modelsAsAService:
-        managementState: *maas
     kserve:
       managementState: Managed
       nim:
         managementState: Managed
       rawDeploymentServiceConfig: Headed
-      modelsAsService:
-        managementState: Managed
     modelregistry:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
@@ -82,10 +81,11 @@ dataScienceCluster:
 userGroups:
   - system:authenticated
 
+# modelAsService and observabilityDashboard are intentionally omitted. They are
+# set from enableMaasApp and enableObservabilityApp in
+# templates/configs/35-odhdashboardconfig.yaml.
 dashboardConfig:
   genAiStudio: true
-  modelAsService: true
-  observabilityDashboard: true
   automl: true
 
 defaultWorkbenchPvcSize: 20Gi
